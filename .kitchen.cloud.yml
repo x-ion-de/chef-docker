@@ -1,0 +1,133 @@
+---
+driver_config:
+   digitalocean_api_token: <%= ENV['DIGITALOCEAN_API_TOKEN'] %>
+   aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+   aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+   aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+   flavor_id: <%= ENV['EC2_FLAVOR_ID'] %>
+   availability_zone: <%= ENV['AWS_AVAILABILITY_ZONE'] %>
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: latest
+
+platforms:
+- name: centos-6.5
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: centos-6-5-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+
+- name: centos-7.0
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: centos-7-0-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+
+- name: amazon-2014.09
+  driver_plugin: ec2
+  driver_config:
+    image_id: ami-9a6ed3f2
+    username: ec2-user
+    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+
+- name: fedora-21
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: fedora-21-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+
+- name: debian-7.0
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: debian-7-0-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+  run_list:
+  - recipe[apt]
+
+- name: ubuntu-12.04
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: ubuntu-12-04-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+  run_list:
+  - recipe[apt]
+
+- name: ubuntu-14.04
+  driver_plugin: vagrant
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: ubuntu-14-04-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+  run_list:
+  - recipe[apt]
+
+suites:
+#
+# Package Installations
+#
+- name: package-native
+  run_list:
+  - recipe[build-essential]
+  - recipe[docker_test::default]
+  - recipe[docker_test::image_lwrp]
+  - recipe[docker_test::container_lwrp]
+  attributes:
+    docker:
+      install_type: package
+
+#
+# Binary Installations
+#
+- name: binary-native
+  excludes:
+  - centos-6.5
+  run_list:
+  - recipe[build-essential]
+  - recipe[docker_test::default]
+  - recipe[docker_test::image_lwrp]
+  - recipe[docker_test::container_lwrp]
+  attributes:
+    docker:
+      install_type: binary
+
+#
+# Source Installations
+#
+#- name: source-native
+#  excludes:
+#  - centos-6.5
+#  run_list:
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::image_lwrp]
+#  - recipe[docker_test::container_lwrp]
+#  attributes:
+#    docker:
+#      install_type: source
+#
+# Archived Tests
+#
+#- name: docker-lwrp-native
+#  run_list:
+#  - recipe[minitest-handler]
+#  - recipe[docker_test::default]
+#  - recipe[docker_test::image_lwrp]
+#  - recipe[docker_test::container_lwrp]
