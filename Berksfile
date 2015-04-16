@@ -7,4 +7,5 @@ group :integration do
 end
 
 cookbook 'git', path: '/Users/someara/src/opscode-cookbooks/git'
+cookbook 'runit', path: '/Users/someara/src/opscode-cookbooks/runit'
 
