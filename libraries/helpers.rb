@@ -1,6 +1,10 @@
 require 'chef/mixin/shell_out'
 include Chef::Mixin::ShellOut
 
+module DockerHelpers
+  
+end
+
 # Docker module
 module Docker
   # Docker::Helpers module
