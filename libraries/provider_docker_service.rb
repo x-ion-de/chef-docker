@@ -18,6 +18,16 @@ class Chef
 
       # actions :create, :delete, :start, :stop, :restart, :enable
       action :create do
+
+        # Pull a precompiled binary off the network
+        remote_file docker_bin do
+          source parsed_source
+          checksum parsed_checksum
+          owner 'root'
+          group 'root'
+          mode '0755'
+          action :create
+        end        
       end
 
       action :delete do

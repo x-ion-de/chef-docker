@@ -12,6 +12,10 @@ class Chef
 
       # register with the resource resolution system
       provides :docker_service
+      
+      attribute :source
+      attribute :version
+      attribute :checksum
     end
   end
 end
