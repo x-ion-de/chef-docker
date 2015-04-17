@@ -1,3 +1,4 @@
+#<% require 'kitchen-sync' %>
 ---
 driver_config:
    digitalocean_api_token: <%= ENV['DIGITALOCEAN_API_TOKEN'] %>
@@ -88,4 +89,3 @@ suites:
   includes: 'ubuntu-14.04'
   run_list:
   - recipe[docker_service_test]
-
