@@ -9,7 +9,7 @@ driver_config:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: latest
+  require_chef_omnibus: 12.2.1
 
 platforms:
 - name: centos-6.5
@@ -30,12 +30,12 @@ platforms:
     ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
     ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
 
-- name: amazon-2014.09
-  driver_plugin: ec2
-  driver_config:
-    image_id: ami-9a6ed3f2
-    username: ec2-user
-    ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+# - name: amazon-2014.09
+#   driver_plugin: ec2
+#   driver_config:
+#     image_id: ami-9a6ed3f2
+#     username: ec2-user
+#     ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 - name: fedora-21
   driver_plugin: digital_ocean
@@ -82,52 +82,10 @@ platforms:
 
 suites:
 #
-# Package Installations
+# Resource behavior testing cookbooks
 #
-- name: package-native
+- name: service
+  includes: 'ubuntu-14.04'
   run_list:
-  - recipe[build-essential]
-  - recipe[docker_test::default]
-  - recipe[docker_test::image_lwrp]
-  - recipe[docker_test::container_lwrp]
-  attributes:
-    docker:
-      install_type: package
+  - recipe[docker_service_test]
 
-#
-# Binary Installations
-#
-- name: binary-native
-  excludes:
-  - centos-6.5
-  run_list:
-  - recipe[build-essential]
-  - recipe[docker_test::default]
-  - recipe[docker_test::image_lwrp]
-  - recipe[docker_test::container_lwrp]
-  attributes:
-    docker:
-      install_type: binary
-
-#
-# Source Installations
-#
-#- name: source-native
-#  excludes:
-#  - centos-6.5
-#  run_list:
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::image_lwrp]
-#  - recipe[docker_test::container_lwrp]
-#  attributes:
-#    docker:
-#      install_type: source
-#
-# Archived Tests
-#
-#- name: docker-lwrp-native
-#  run_list:
-#  - recipe[minitest-handler]
-#  - recipe[docker_test::default]
-#  - recipe[docker_test::image_lwrp]
-#  - recipe[docker_test::container_lwrp]

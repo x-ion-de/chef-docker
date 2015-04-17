@@ -23,7 +23,6 @@ end
 
 case node['platform']
 when 'debian', 'ubuntu'
-  include_recipe 'apt'
   package 'apt-transport-https'
   package 'bsdtar'
   if node['platform'] == 'debian'
@@ -39,11 +38,6 @@ when 'debian', 'ubuntu'
   end
 end
 
-if node['docker']['exec_driver'] == 'lxc'
-  include_recipe 'docker::cgroups'
-  include_recipe 'docker::lxc'
-end
-
 directory 'docker-graph' do
   path node['docker']['graph']
   not_if { node['docker']['graph'].nil? }
@@ -55,7 +49,6 @@ unless node['docker']['install_type'] == 'package'
   end
   if node['docker']['install_type'] == 'binary'
     include_recipe 'git'
-    include_recipe 'iptables'
 
     node['docker']['binary']['dependency_packages'].each do |p|
       package p
