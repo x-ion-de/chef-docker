@@ -7,17 +7,13 @@ group :test, :integration do
 end
 
 group :test do
-  gem 'chefspec', '~> 4.2.0'
-  # elecksee is lxc dependency
-  gem 'elecksee', '~> 1.0.20'
+  gem 'chefspec', '~> 4.0'
   gem 'foodcritic', '~> 3.0.3'
   gem 'rubocop', '~> 0.23'
 end
 
 group :integration do
-  gem 'busser-serverspec', '~> 0.2.6'
-  gem 'kitchen-vagrant', '~> 0.14'
-  gem 'test-kitchen', '~> 1.1'
+  gem 'test-kitchen', '~> 1.3'
 end
 
 # group :development do

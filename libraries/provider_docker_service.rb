@@ -16,9 +16,8 @@ class Chef
       # Mix in helpers from libraries/helpers.rb
       include DockerHelpers
 
-      # actions :create, :delete, :start, :stop, :restart, :enable
+      # Put the appropriate bits on disk.
       action :create do
-
         # Pull a precompiled binary off the network
         remote_file docker_bin do
           source parsed_source
@@ -27,13 +26,22 @@ class Chef
           group 'root'
           mode '0755'
           action :create
-        end        
+        end
       end
 
       action :delete do
+        file docker_bin do
+          action :delete
+        end
       end
 
+      # Start the service
       action :start do
+        service "docker-#{new_resource.name}" do
+          start_command "strace #{docker_bin} -D -d & > /root/wat"
+          # pattern "#{docker_bin} daemon"
+          action :start
+        end
       end
 
       action :stop do

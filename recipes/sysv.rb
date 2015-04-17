@@ -19,6 +19,6 @@ template docker_settings_file do
 end
 
 service 'docker' do
-  supports :status => true, :restart => true, :reload => true
+  supports status: true, restart: true, reload: true
   action [:start, :enable]
 end

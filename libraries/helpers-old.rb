@@ -6,7 +6,7 @@ module DockerHelpers
   def docker_bin
     return '/usr/bin/docker.io' if Docker::Helpers.using_docker_io_package?(node)
     "#{node['docker']['install_dir']}/docker"
-  end  
+  end
 end
 
 # Docker module
@@ -109,7 +109,7 @@ EOH
         'tlscert' => node['docker']['tlscert'],
         'tlskey' => node['docker']['tlskey'],
         'tlsverify' => node['docker']['tlsverify']
-        )
+      )
       daemon_options += " #{node['docker']['options']}" if node['docker']['options']
       daemon_options
     end
@@ -239,7 +239,7 @@ EOM
     def execute_cmd(cmd, timeout = new_resource.cmd_timeout)
       Chef::Log.debug('Executing: ' + cmd)
       begin
-        shell_out(cmd, :timeout => timeout)
+        shell_out(cmd, timeout: timeout)
       rescue Mixlib::ShellOut::CommandTimeout
         raise CommandTimeout, command_timeout_error_message(cmd)
       end

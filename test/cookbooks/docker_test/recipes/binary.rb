@@ -1,3 +1,3 @@
-node.set['docker']['install_type'] = "binary"
+node.set['docker']['install_type'] = 'binary'
 
-include_recipe "docker"
+include_recipe 'docker'

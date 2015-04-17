@@ -1,6 +1,5 @@
 module Serverspec
   module Type
-    
     class DockerImage < Base
       require 'mixlib/shellout'
       require 'docker'
@@ -22,13 +21,11 @@ module Serverspec
       private
 
       def find_image
-        images = Docker::Image.all(:all => true)
+        images = Docker::Image.all(all: true)
         images.each do |image|
-          if image.info['RepoTags'].include?(@name)
-            return image
-          end
+          return image if image.info['RepoTags'].include?(@name)
         end
-        return nil
+        nil
       end
 
       def with_latest(image)

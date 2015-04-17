@@ -1,5 +1,5 @@
 # comments!
 
 docker_service 'default' do
-  action [:create]
+  action [:create, :start]
 end

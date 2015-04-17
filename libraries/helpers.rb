@@ -38,12 +38,11 @@ module DockerHelpers
 
   def parsed_version
     return new_resource.version if new_resource.version
-    return '1.6.0'
+    '1.6.0'
   end
 
   def parsed_source
     return new_resource.source if new_resource.source
-    puts "SEANDEBUG: http://get.docker.io/builds/#{docker_kernel}/#{docker_arch}/docker-#{parsed_version}"
     "http://get.docker.io/builds/#{docker_kernel}/#{docker_arch}/docker-#{parsed_version}"
   end
 end

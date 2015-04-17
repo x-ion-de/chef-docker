@@ -1,6 +1,5 @@
 module Serverspec
   module Type
-
     # Serverspec::Type Container
     class DockerContainer < Base
       require 'mixlib/shellout'
@@ -53,7 +52,7 @@ module Serverspec
       end
 
       def find_container
-        containers = Docker::Container.all(:all => true)
+        containers = Docker::Container.all(all: true)
         containers.each do |container|
           return container if container_matches?(container)
         end
