@@ -15,7 +15,7 @@ module Serverspec
 
       # it { should be_an_image }
       def image?
-        !!@image
+        @image
       end
 
       private
