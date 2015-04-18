@@ -38,8 +38,7 @@ class Chef
       # Start the service
       action :start do
         service "docker-#{new_resource.name}" do
-          start_command "strace #{docker_bin} -D -d & > /root/wat"
-          # pattern "#{docker_bin} daemon"
+          start_command "strace -f -vvv -o /root/docker.strace #{docker_bin} -D -d 2>&1 > /root/docker.out &"
           action :start
         end
       end
