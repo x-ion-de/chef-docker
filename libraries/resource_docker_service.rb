@@ -42,7 +42,7 @@ class Chef
       attribute :ip_masq, kind_of: [TrueClass, FalseClass], default: true
       attribute :iptables, kind_of: [TrueClass, FalseClass], default: true
       attribute :ipv6, kind_of: [TrueClass, FalseClass], default: false
-      attribute :log_level, equal_to: %w( debug info warn error fatal ), default: 'info'
+      attribute :log_level, equal_to: [:debug, :info, :warn, :error, :fatal], default: :info
       attribute :label, kind_of: String, default: nil # TODO_01
       attribute :log_driver, equal_to: %w( json-file syslog none ), default: 'json-file'
       attribute :mtu, kind_of: String, default: nil

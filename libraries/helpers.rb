@@ -68,7 +68,7 @@ module DockerHelpers
     cmd << " --bridge=#{new_resource.bridge}" if new_resource.bridge
     cmd << " --bip=#{new_resource.bip}" if new_resource.bip
     cmd << ' --debug' if new_resource.debug
-    cmd << ' --daemon=true' if new_resource.daemon
+    cmd << ' -d' if new_resource.daemon
     cmd << " --default-ulimit=#{new_resource.default_ulimit}" if new_resource.default_ulimit
     cmd << " --dns=#{new_resource.dns}" if new_resource.dns
     cmd << " --dns-search=#{new_resource.dns_search}" if new_resource.dns_search
