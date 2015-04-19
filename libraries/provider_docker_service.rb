@@ -37,9 +37,12 @@ class Chef
 
       # Start the service
       action :start do
+        # Go doesn't support detaching processes natively, so we have
+        # to manually nohup and fork.
+        # https://github.com/docker/docker/issues/2758        
         execute "docker-#{new_resource.name}" do
-          command "nohup #{docker_daemon_cmd} &"
-          # not_if { docker_daemon_running? }
+          command "nohup #{docker_daemon_cmd} &>> #{docker_log} &"
+          not_if "/usr/bin/ps -ef | /usr/bin/awk '{ print $8 }' | grep ^#{docker_bin}$"
         end
       end
 
