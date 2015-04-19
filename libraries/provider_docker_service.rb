@@ -59,6 +59,7 @@ class Chef
       end
 
       action :enable do
+        log 'action :enable not implemented on this provider'
       end
     end
   end
