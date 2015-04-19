@@ -1,4 +1,4 @@
-include_attribute 'golang'
+# include_attribute 'golang'
 
 # Installation/System attributes
 
