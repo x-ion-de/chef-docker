@@ -54,6 +54,8 @@ class Chef
       end
 
       action :restart do
+        action_stop
+        action_start
       end
 
       action :enable do
