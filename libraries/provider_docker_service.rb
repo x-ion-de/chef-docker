@@ -47,6 +47,10 @@ class Chef
       end
 
       action :stop do
+        execute "docker-#{new_resource.name}" do
+          command 'kill `pidof docker`'
+          only_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
+        end
       end
 
       action :restart do
