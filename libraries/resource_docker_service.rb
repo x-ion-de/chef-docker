@@ -6,7 +6,7 @@ class Chef
       # directories auto-name things.
       self.resource_name = :docker_service
 
-      # resource actions
+      # service actions
       actions :create, :delete, :start, :stop, :restart
       default_action :create
 
@@ -18,7 +18,7 @@ class Chef
       attribute :version
       attribute :checksum
 
-      # service runtime properties
+      # daemon runtime arguments
       attribute :instance, kind_of: String, name_attribute: true, required: true
       attribute :api_cors_header, kind_of: String, default: nil
       attribute :bridge, kind_of: String, regex: [IPV4_ADDR, IPV6_ADDR], default: nil
@@ -56,6 +56,12 @@ class Chef
       attribute :tlsverify, kind_of: [TrueClass, FalseClass], default: nil
       attribute :default_ulimit, kind_of: String, default: nil
 
+      # environment variables to set before running daemon
+      attribute :http_proxy, kind_of: String, default: nil
+      attribute :https_proxy, kind_of: String, default: nil
+      attribute :no_proxy, kind_of: String, default: nil
+      attribute :tmpdir, kind_of: String, default: nil
+      
       include DockerHelpers
     end
   end
