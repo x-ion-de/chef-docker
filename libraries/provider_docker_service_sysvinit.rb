@@ -7,7 +7,6 @@ class Chef
         provides :docker_service, platform: 'redhat'
         provides :docker_service, platform: 'suse'
 
-        # Start the service
         action :start do
           template "#{new_resource.instance} :start /etc/init.d/#{docker_name}" do
             path "/etc/init.d/#{docker_name}"
@@ -16,17 +15,36 @@ class Chef
             group 'root'
             mode '0755'
             cookbook 'docker'
-            variables(config: new_resource,pidfile: parsed_pidfile)
+            variables(config: new_resource, pidfile: parsed_pidfile)
             action :create
+          end
+
+          service "#{new_resource.name} :start #{docker_name}" do
+            service_name docker_name
+            provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
+            provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
+            supports restart: true, status: true
+            action [:enable, :start]
           end
         end
 
         action :stop do
+          service "#{new_resource.name} :stop #{docker_name}" do
+            service_name docker_name
+            provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
+            provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
+            supports restart: true, status: true
+            action [:stop]
+          end
         end
 
         action :restart do
-          action_stop
-          action_start
+          service "#{new_resource.name} :reload #{docker_name}" do
+            service_name docker_name
+            provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
+            provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
+            action :reload
+          end
         end
       end
     end
