@@ -7,7 +7,7 @@ class Chef
       self.resource_name = :docker_service
 
       # resource actions
-      actions :create, :delete, :start, :stop, :restart, :enable
+      actions :create, :delete, :start, :stop, :restart
       default_action :create
 
       # register with the resource resolution system

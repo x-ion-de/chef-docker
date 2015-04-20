@@ -6,9 +6,10 @@ class Chef
         provides :docker_service, platform: 'centos'
         provides :docker_service, platform: 'redhat'
         provides :docker_service, platform: 'suse'
+        provides :docker_service, platform_family: 'debian'
 
         action :start do
-          template "#{new_resource.instance} :start /etc/init.d/#{docker_name}" do
+          template "/etc/init.d/#{docker_name}" do
             path "/etc/init.d/#{docker_name}"
             source 'sysvinit/docker.erb'
             owner 'root'
@@ -19,7 +20,7 @@ class Chef
             action :create
           end
 
-          service "#{new_resource.name} :start #{docker_name}" do
+          service "#{docker_name}" do
             service_name docker_name
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
@@ -29,7 +30,7 @@ class Chef
         end
 
         action :stop do
-          service "#{new_resource.name} :stop #{docker_name}" do
+          service "#{docker_name}" do
             service_name docker_name
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
@@ -39,7 +40,7 @@ class Chef
         end
 
         action :restart do
-          service "#{new_resource.name} :reload #{docker_name}" do
+          service "#{docker_name}" do
             service_name docker_name
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'

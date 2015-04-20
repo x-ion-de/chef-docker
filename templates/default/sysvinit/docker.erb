@@ -19,8 +19,11 @@
 # Description: Daemon for docker.com
 ### END INIT INFO
 
-# Source function library.
+# Source functions
+<% if node['platform_family'] == 'rhel' %>
+# Source RHEL function library.
 . /etc/rc.d/init.d/functions
+<% end %>
 
 exec="<%= @config.docker_bin %>"
 prog="docker"
@@ -78,10 +81,11 @@ start() {
         success
         echo
     else
-        failure
-        echo
+        <% if node['platform_family'] == 'rhel' %>
+        action $"$pidfile still exists...\n " /bin/false
+        <% else %>
         printf "$pidfile still exists...\n"
-        exit 7
+        <% end %>
     fi
 }
 

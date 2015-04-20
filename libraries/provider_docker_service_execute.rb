@@ -25,10 +25,6 @@ class Chef
           action_stop
           action_start
         end
-
-        action :enable do
-          log 'action :enable not implemented on this provider'
-        end
       end
     end
   end
