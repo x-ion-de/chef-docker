@@ -6,7 +6,7 @@ class Chef
         provides :docker_service, platform: 'centos'
         provides :docker_service, platform: 'redhat'
         provides :docker_service, platform: 'suse'
-        provides :docker_service, platform_family: 'debian'
+        provides :docker_service, platform: 'debian'
 
         action :start do
           template '/etc/init.d/docker' do

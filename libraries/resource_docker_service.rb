@@ -40,7 +40,7 @@ class Chef
       attribute :ip_masq, kind_of: [TrueClass, FalseClass], default: nil
       attribute :iptables, kind_of: [TrueClass, FalseClass], default: nil
       attribute :ipv6, kind_of: [TrueClass, FalseClass], default: nil
-      attribute :log_level, equal_to: [:debug, :info, :warn, :error, :fatal], default: nil
+      attribute :log_level, equal_to: [:debug, :info, :warn, :error, :fatal], default: :info
       attribute :label, kind_of: String, default: nil # TODO_01
       attribute :log_driver, equal_to: %w( json-file syslog none ), default: nil
       attribute :mtu, kind_of: String, default: nil
@@ -61,6 +61,9 @@ class Chef
       attribute :https_proxy, kind_of: String, default: nil
       attribute :no_proxy, kind_of: String, default: nil
       attribute :tmpdir, kind_of: String, default: nil
+
+      # misc
+      attribute :logfile, kind_of: String, default: '/var/log/docker.log'
 
       include DockerHelpers
     end

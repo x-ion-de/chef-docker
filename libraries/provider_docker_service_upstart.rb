@@ -2,9 +2,23 @@ class Chef
   class Provider
     class DockerService
       class Upstart < Chef::Provider::DockerService
-        provides :docker_service, platform_family: 'ubuntu'
+        provides :docker_service, platform: 'ubuntu'
 
         action :start do
+          template '/etc/default/docker' do
+            source 'upstart/etc.default.docker.erb'
+            mode '0644'
+            owner 'root'
+            group 'root'
+            variables(
+              config: new_resource,
+              docker_bin: docker_bin,
+              docker_opts: docker_opts
+            )
+            cookbook 'docker'
+            action :create
+          end
+
           template '/etc/init/docker.conf' do
             path '/etc/init/docker.conf'
             source 'upstart/docker.conf.erb'
@@ -13,7 +27,7 @@ class Chef
             mode '0644'
             variables(
               config: new_resource,
-              docker_daemon_cmd: docker_name
+              docker_daemon_cmd: docker_daemon_cmd
             )
             cookbook 'docker'
             action :create
