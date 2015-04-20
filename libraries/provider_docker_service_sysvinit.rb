@@ -9,8 +9,8 @@ class Chef
         provides :docker_service, platform_family: 'debian'
 
         action :start do
-          template "/etc/init.d/#{docker_name}" do
-            path "/etc/init.d/#{docker_name}"
+          template '/etc/init.d/docker' do
+            path '/etc/init.d/docker'
             source 'sysvinit/docker.erb'
             owner 'root'
             group 'root'
@@ -20,8 +20,7 @@ class Chef
             action :create
           end
 
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
             supports restart: true, status: true
@@ -30,8 +29,7 @@ class Chef
         end
 
         action :stop do
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
             supports restart: true, status: true
@@ -40,8 +38,7 @@ class Chef
         end
 
         action :restart do
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Init::Redhat if node['platform_family'] == 'redhat'
             provider Chef::Provider::Service::Init::Insserv if node['platform_family'] == 'debian'
             action :reload

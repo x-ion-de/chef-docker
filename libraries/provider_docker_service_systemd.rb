@@ -6,8 +6,8 @@ class Chef
 
         action :start do
           # this is the main systemd unit file
-          template "/usr/lib/systemd/system/#{docker_name}.service" do
-            path "/usr/lib/systemd/system/#{docker_name}.service"
+          template '/usr/lib/systemd/system/docker.service' do
+            path '/usr/lib/systemd/system/docker.service'
             source 'systemd/docker.service.erb'
             owner 'root'
             group 'root'
@@ -15,21 +15,21 @@ class Chef
             variables(
               config: new_resource,
               docker_daemon_cmd: docker_daemon_cmd
-              )
+            )
             cookbook 'docker'
-            notifies :run, "execute[systemctl daemon-reload]", :immediately
+            notifies :run, 'execute[systemctl daemon-reload]', :immediately
             action :create
           end
 
           # avoid 'Unit file changed on disk' warning
-          execute "systemctl daemon-reload" do
+          execute 'systemctl daemon-reload' do
             command '/usr/bin/systemctl daemon-reload'
             action :nothing
           end
 
           # tmpfiles.d config so the service survives reboot
-          template "/usr/lib/tmpfiles.d/#{docker_name}.conf" do
-            path "/usr/lib/tmpfiles.d/#{docker_name}.conf"
+          template '/usr/lib/tmpfiles.d/docker.conf' do
+            path '/usr/lib/tmpfiles.d/docker.conf'
             source 'systemd/tmpfiles.d.conf.erb'
             owner 'root'
             group 'root'
@@ -40,8 +40,7 @@ class Chef
           end
 
           # service management resource
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Systemd
             supports restart: true, status: true
             action [:enable, :start]
@@ -50,19 +49,17 @@ class Chef
 
         action :stop do
           # service management resource
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Systemd
             supports status: true
             action [:disable, :stop]
-            only_if { ::File.exist?("/usr/lib/systemd/system/#{docker_name}.service") }
+            only_if { ::File.exist?('/usr/lib/systemd/system/docker.service') }
           end
         end
 
         action :restart do
           # service management resource
-          service "#{docker_name}" do
-            service_name docker_name
+          service 'docker' do
             provider Chef::Provider::Service::Systemd
             action :reload
           end

@@ -61,7 +61,7 @@ class Chef
       attribute :https_proxy, kind_of: String, default: nil
       attribute :no_proxy, kind_of: String, default: nil
       attribute :tmpdir, kind_of: String, default: nil
-      
+
       include DockerHelpers
     end
   end

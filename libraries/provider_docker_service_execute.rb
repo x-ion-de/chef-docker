@@ -7,7 +7,7 @@ class Chef
           # Go doesn't support detaching processes natively, so we have
           # to manually fork it from the shell with &
           # https://github.com/docker/docker/issues/2758
-          bash "docker-#{new_resource.name}" do
+          bash 'start docker' do
             code "#{docker_daemon_cmd} &>> #{docker_log} &"
             not_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
             action :run
@@ -15,7 +15,7 @@ class Chef
         end
 
         action :stop do
-          execute "docker-#{new_resource.name}" do
+          execute 'stop docker' do
             command 'kill `pidof docker`'
             only_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
           end
