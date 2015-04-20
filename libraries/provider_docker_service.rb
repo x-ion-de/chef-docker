@@ -35,32 +35,23 @@ class Chef
         end
       end
 
-      # Start the service
+      # These are implemented in subclasses.
+      #
+      # Chef::Provider::DockerService::Execute
+      # Chef::Provider::DockerService::Sysvinit
+      # Chef::Provider::DockerService::Upstart
+      # Chef::Provider::DockerService::Systemd
+      # Chef::Provider::DockerService::Runit
       action :start do
-        # Go doesn't support detaching processes natively, so we have
-        # to manually fork it from the shell with &
-        # https://github.com/docker/docker/issues/2758
-        bash "docker-#{new_resource.name}" do
-          code "#{docker_daemon_cmd} &>> #{docker_log} &"
-          not_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
-          action :run
-        end
       end
 
       action :stop do
-        execute "docker-#{new_resource.name}" do
-          command 'kill `pidof docker`'
-          only_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
-        end
       end
 
       action :restart do
-        action_stop
-        action_start
       end
 
       action :enable do
-        log 'action :enable not implemented on this provider'
       end
     end
   end

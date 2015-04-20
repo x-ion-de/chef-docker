@@ -1,6 +1,3 @@
-# TODO_01: Should accept String or Array
-#          Verify contents
-
 class Chef
   class Resource
     class DockerService < Chef::Resource::LWRPBase
@@ -22,6 +19,7 @@ class Chef
       attribute :checksum
 
       # service runtime properties
+      attribute :instance, kind_of: String, name_attribute: true, required: true
       attribute :api_cors_header, kind_of: String, default: nil
       attribute :bridge, kind_of: String, regex: [IPV4_ADDR, IPV6_ADDR], default: nil
       attribute :bip, kind_of: String, regex: IPV4_ADDR,  default: nil
@@ -38,7 +36,7 @@ class Chef
       attribute :icc, kind_of: [TrueClass, FalseClass], default: nil
       attribute :insecure_registry, kind_of: String, default: nil # TODO_01
       attribute :ip, kind_of: String, regex: [IPV4_ADDR, IPV6_ADDR], default: nil
-      attribute :ip_forward, kind_of: [TrueClass, FalseClass], default: nil
+      attribute :ip_forward, kind_of: [TrueClass, FalseClass], default: true
       attribute :ip_masq, kind_of: [TrueClass, FalseClass], default: nil
       attribute :iptables, kind_of: [TrueClass, FalseClass], default: nil
       attribute :ipv6, kind_of: [TrueClass, FalseClass], default: nil
@@ -57,6 +55,8 @@ class Chef
       attribute :tlskey, kind_of: String, default: nil
       attribute :tlsverify, kind_of: [TrueClass, FalseClass], default: nil
       attribute :default_ulimit, kind_of: String, default: nil
+
+      include DockerHelpers
     end
   end
 end

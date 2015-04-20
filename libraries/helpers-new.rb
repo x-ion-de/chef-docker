@@ -38,6 +38,10 @@ module DockerHelpers
     '/var/log/docker.log'
   end
 
+  def docker_name
+    'docker'
+  end
+
   def parsed_checksum
     case docker_arch
     when 'Darwin'
@@ -50,6 +54,11 @@ module DockerHelpers
       when '1.6.0' then '526fbd15dc6bcf2f24f99959d998d080136e290bbb017624a5a3821b63916ae8'
       end
     end
+  end
+
+  def parsed_pidfile
+    return new_resource.pidfile if new_resource.pidfile
+    "/var/run/#{docker_name}.pid"
   end
 
   def parsed_version
