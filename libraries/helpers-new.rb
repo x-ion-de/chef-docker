@@ -72,9 +72,11 @@ module DockerHelpers
   end
 
   def docker_daemon_cmd
-    "#{docker_bin} -d #{docker_opts}"
+    cmd = "#{docker_bin} -d"
+    docker_opts.each { |opt| cmd << opt }
+    cmd
   end
-  
+
   def docker_opts
     opts = []
     opts << " --api-cors-header=#{new_resource.api_cors_header}" if new_resource.api_cors_header

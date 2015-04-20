@@ -14,7 +14,8 @@ class Chef
             mode '0644'
             variables(
               config: new_resource,
-              docker_daemon_cmd: docker_daemon_cmd
+              docker_bin: docker_bin,
+              docker_opts: docker_opts
             )
             cookbook 'docker'
             notifies :run, 'execute[systemctl daemon-reload]', :immediately

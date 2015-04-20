@@ -20,7 +20,7 @@ ExecStartPre=/usr/sbin/sysctl -w net.ipv4.ip_forward=1
 <% if @config.ipv6 %>
 ExecStartPre=/usr/sbin/sysctl -w net.ipv6.conf.all.forwarding=1
 <% end %>
-ExecStart=<%= @docker_daemon_cmd %>
+ExecStart=<%= @docker_bin %> -d <% @docker_opts.each do |opt| %><%= opt %><% end %>
 ExecStop=kill `pidof docker`
 MountFlags=slave
 LimitNOFILE=1048576
