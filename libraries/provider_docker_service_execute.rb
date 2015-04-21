@@ -2,6 +2,8 @@ class Chef
   class Provider
     class DockerService
       class Execute < Chef::Provider::DockerService
+        provides :docker_service, os: ' linux'
+
         # Start the service
         action :start do
           # Go doesn't support detaching processes natively, so we have
