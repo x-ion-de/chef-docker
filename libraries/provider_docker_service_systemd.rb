@@ -3,6 +3,9 @@ class Chef
     class DockerService
       class Systemd < Chef::Provider::DockerService
         provides :docker_service, platform: 'fedora'
+        provides :docker_service, platform: %w(redhat centos scientific) do |node|
+          node[:platform_version].to_f >= 7.0
+        end
 
         action :start do
           # this is the main systemd unit file
