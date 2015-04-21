@@ -37,6 +37,8 @@ class Chef
       attribute :insecure_registry, kind_of: String, default: nil # TODO_01
       attribute :ip, kind_of: String, regex: [IPV4_ADDR, IPV6_ADDR], default: nil
       attribute :ip_forward, kind_of: [TrueClass, FalseClass], default: true
+      attribute :ipv4_forward, kind_of: [TrueClass, FalseClass], default: true
+      attribute :ipv6_forward, kind_of: [TrueClass, FalseClass], default: true
       attribute :ip_masq, kind_of: [TrueClass, FalseClass], default: nil
       attribute :iptables, kind_of: [TrueClass, FalseClass], default: nil
       attribute :ipv6, kind_of: [TrueClass, FalseClass], default: nil
