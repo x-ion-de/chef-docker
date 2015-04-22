@@ -8,9 +8,6 @@ class Chef
         end
 
         action :start do
-
-          puts "SEANDEBUG: #{docker_opts}"
-          
           # this is the main systemd unit file
           template '/usr/lib/systemd/system/docker.service' do
             path '/usr/lib/systemd/system/docker.service'
