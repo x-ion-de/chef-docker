@@ -92,9 +92,9 @@ suites:
   run_list:
   - recipe[docker_service_test]
 
-- name: service-host
+- name: service-tcp-tls
   includes: [
     'fedora-21'
   ]
   run_list:
-  - recipe[docker_service_test::host]
+  - recipe[docker_service_test::tcp-tls]

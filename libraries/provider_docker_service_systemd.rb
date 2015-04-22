@@ -8,6 +8,9 @@ class Chef
         end
 
         action :start do
+
+          puts "SEANDEBUG: #{docker_opts}"
+          
           # this is the main systemd unit file
           template '/usr/lib/systemd/system/docker.service' do
             path '/usr/lib/systemd/system/docker.service'
@@ -62,11 +65,8 @@ class Chef
         end
 
         action :restart do
-          # service management resource
-          service 'docker' do
-            provider Chef::Provider::Service::Systemd
-            action :reload
-          end
+          action_stop
+          action_start
         end
       end
     end
