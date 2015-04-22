@@ -85,12 +85,12 @@ suites:
 #
 # Resource behavior testing cookbooks
 #
-- name: service-default
+- name: service-socket
   includes: [
     'fedora-21'
   ]
   run_list:
-  - recipe[docker_service_test]
+  - recipe[docker_service_test::socket]
 
 - name: service-tcp-tls
   includes: [
