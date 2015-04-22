@@ -85,10 +85,16 @@ suites:
 #
 # Resource behavior testing cookbooks
 #
-- name: service
-  # includes: [
-  #   'ubuntu-14.04',
-  #   'centos-7.0'
-  # ]
+- name: service-default
+  includes: [
+    'fedora-21'
+  ]
   run_list:
   - recipe[docker_service_test]
+
+- name: service-host
+  includes: [
+    'fedora-21'
+  ]
+  run_list:
+  - recipe[docker_service_test::host]
