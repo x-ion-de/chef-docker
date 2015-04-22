@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'docker_service_test::default on centos-7.0' do
+describe 'docker_service_testsocket on centos-7.0' do
   cached(:default) do
     ChefSpec::SoloRunner.new(
       platform: 'centos',
@@ -8,10 +8,10 @@ describe 'docker_service_test::default on centos-7.0' do
     # step_into: 'docker_service'
     ) do |node|
       node.set['docker']['version'] = nil
-    end.converge('docker_service_test::default')
+    end.converge('docker_service_testsocket')
   end
 
-  # Resource in docker_service_test::default
+  # Resource in docker_service_testsocket
   context 'compiling the test recipe' do
     it 'creates docker_service[default]' do
       expect(default).to create_docker_service('default')

@@ -87,14 +87,16 @@ suites:
 #
 - name: service-socket
   includes: [
-    'fedora-21'
+    'fedora-21',
+    'centos-6.5'
   ]
   run_list:
   - recipe[docker_service_test::socket]
 
 - name: service-tcp-tls
   includes: [
-    'fedora-21'
+    'fedora-21',
+    'centos-6.5'
   ]
   run_list:
   - recipe[docker_service_test::tcp-tls]
