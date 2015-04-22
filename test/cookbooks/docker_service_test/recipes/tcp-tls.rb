@@ -24,12 +24,6 @@ execute 'starting crlnumber' do
   action :run
 end
 
-# extra stuff
-file "#{caroot}/extfile.cnf" do
-  content "subjectAltName = IP:#{node['ipaddress']},IP:127.0.0.1\n"
-  action :create
-end
-
 # Self sicned CA
 execute 'generating CA private key' do
   cmd = 'openssl req'
@@ -67,6 +61,11 @@ execute 'generating certificate request for server' do
   action :run
 end
 
+file "#{caroot}/server-extfile.cnf" do
+  content "subjectAltName = IP:#{node['ipaddress']},IP:127.0.0.1\n"
+  action :create
+end
+
 execute 'signing request for server' do
   cmd = 'openssl x509'
   cmd += ' -req'
@@ -74,7 +73,7 @@ execute 'signing request for server' do
   cmd += " -CAkey #{caroot}/cakey.pem"
   cmd += " -in #{caroot}/server.csr"
   cmd += " -out #{caroot}/server.pem"
-  cmd += " -extfile #{caroot}/extfile.cnf"
+  cmd += " -extfile #{caroot}/server-extfile.cnf"
   not_if "/usr/bin/test -f #{caroot}/server.pem"
   command cmd
   action :run
@@ -100,6 +99,11 @@ execute 'generating certificate request for client' do
   action :run
 end
 
+file "#{caroot}/client-extfile.cnf" do
+  content "extendedKeyUsage = clientAuth\n"
+  action :create
+end
+
 execute 'signing request for client' do
   cmd = 'openssl x509'
   cmd += ' -req'
@@ -107,6 +111,7 @@ execute 'signing request for client' do
   cmd += " -CAkey #{caroot}/cakey.pem"
   cmd += " -in #{caroot}/cert.csr"
   cmd += " -out #{caroot}/cert.pem"
+  cmd += " -extfile #{caroot}/client-extfile.cnf"
   command cmd
   not_if "/usr/bin/test -f #{caroot}/cert.pem"
   action :run
