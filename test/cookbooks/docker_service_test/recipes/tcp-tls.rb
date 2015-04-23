@@ -6,26 +6,26 @@ directory "#{caroot}" do
   action :create
 end
 
-execute 'creating PKI index file' do
-  command "/bin/touch #{caroot}/index.txt"
+bash 'creating PKI index file' do
+  code "/bin/touch #{caroot}/index.txt"
   not_if "/usr/bin/test -f #{caroot}/index.txt"
   action :run
 end
 
-execute 'starting PKI serial file' do
-  command "/bin/echo '01' > #{caroot}/serial"
+bash 'starting PKI serial file' do
+  code "/bin/echo '01' > #{caroot}/serial"
   not_if "/usr/bin/test -f #{caroot}/serial"
   action :run
 end
 
-execute 'starting crlnumber' do
-  command "echo '01' > #{caroot}/ca.srl"
+bash 'starting crlnumber' do
+  code "echo '01' > #{caroot}/ca.srl"
   not_if "/usr/bin/test -f #{caroot}/ca.srl"
   action :run
 end
 
 # Self sicned CA
-execute 'generating CA private key' do
+bash 'generating CA private key' do
   cmd = 'openssl req'
   cmd += ' -x509'
   cmd += ' -nodes'
@@ -35,27 +35,27 @@ execute 'generating CA private key' do
   cmd += " -keyout #{caroot}/cakey.pem"
   cmd += " -out #{caroot}/ca.pem"
   cmd += ' 2>&1>/dev/null'
-  command cmd
+  code cmd
   not_if "/usr/bin/test -f #{caroot}/cakey.pem"
   not_if "/usr/bin/test -f #{caroot}/ca.pem"
   action :run
 end
 
 # server certs
-execute 'creating private key for docker server' do
-  command "openssl genrsa -out #{caroot}/serverkey.pem 2048"
+bash 'creating private key for docker server' do
+  code "openssl genrsa -out #{caroot}/serverkey.pem 2048"
   not_if "/usr/bin/test -f #{caroot}/serverkey.pem"
   action :run
 end
 
-execute 'generating certificate request for server' do
+bash 'generating certificate request for server' do
   cmd = 'openssl req'
   cmd += ' -new'
   cmd += ' -nodes'
   cmd += " -subj '/O=kitchen2docker/'"
   cmd += " -key #{caroot}/serverkey.pem"
   cmd += " -out #{caroot}/server.csr"
-  command cmd
+  code cmd
   only_if "/usr/bin/test -f #{caroot}/serverkey.pem"
   not_if "/usr/bin/test -f #{caroot}/server.csr"
   action :run
@@ -66,7 +66,7 @@ file "#{caroot}/server-extfile.cnf" do
   action :create
 end
 
-execute 'signing request for server' do
+bash 'signing request for server' do
   cmd = 'openssl x509'
   cmd += ' -req'
   cmd += " -CA #{caroot}/ca.pem"
@@ -75,25 +75,25 @@ execute 'signing request for server' do
   cmd += " -out #{caroot}/server.pem"
   cmd += " -extfile #{caroot}/server-extfile.cnf"
   not_if "/usr/bin/test -f #{caroot}/server.pem"
-  command cmd
+  code cmd
   action :run
 end
 
 # client certs
-execute 'creating private key for docker client' do
-  command "openssl genrsa -out #{caroot}/key.pem 2048"
+bash 'creating private key for docker client' do
+  code "openssl genrsa -out #{caroot}/key.pem 2048"
   not_if "/usr/bin/test -f #{caroot}/key.pem"
   action :run
 end
 
-execute 'generating certificate request for client' do
+bash 'generating certificate request for client' do
   cmd = 'openssl req'
   cmd += ' -new'
   cmd += ' -nodes'
   cmd += " -subj '/O=kitchen2docker/'"
   cmd += " -key #{caroot}/key.pem"
   cmd += " -out #{caroot}/cert.csr"
-  command cmd
+  code cmd
   only_if "/usr/bin/test -f #{caroot}/key.pem"
   not_if "/usr/bin/test -f #{caroot}/cert.csr"
   action :run
@@ -104,7 +104,7 @@ file "#{caroot}/client-extfile.cnf" do
   action :create
 end
 
-execute 'signing request for client' do
+bash 'signing request for client' do
   cmd = 'openssl x509'
   cmd += ' -req'
   cmd += " -CA #{caroot}/ca.pem"
@@ -112,7 +112,7 @@ execute 'signing request for client' do
   cmd += " -in #{caroot}/cert.csr"
   cmd += " -out #{caroot}/cert.pem"
   cmd += " -extfile #{caroot}/client-extfile.cnf"
-  command cmd
+  code cmd
   not_if "/usr/bin/test -f #{caroot}/cert.pem"
   action :run
 end
