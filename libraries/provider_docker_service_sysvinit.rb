@@ -20,7 +20,7 @@ class Chef
               config: new_resource,
               docker_opts: docker_opts,
               pidfile: parsed_pidfile
-              )
+            )
             action :create
           end
 
