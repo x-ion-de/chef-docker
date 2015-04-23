@@ -49,14 +49,18 @@ prestart() {
         service cgconfig start
     fi
 
-    preexec="/sbin/sysctl"
-    [ -x $preexec ] || exit 6
-    <% if @config.ip_forward -%>
-    $preexec -w net.ipv4.ip_forward=1 > /dev/null 2>&1
-    <% end -%>
-    <% if @config.ipv6 -%>
-    $preexec -w net.ipv6.conf.all.forwarding=1 > /dev/null 2>&1
-    <% end -%>
+    export HTTP_PROXY=<%= @config.http_proxy %>
+    export HTTPS_PROXY=<%= @config.https_proxy %>
+    export NO_PROXY=<%= @config.no_proxy %>
+    export TMPDIR=<%= @config.tmpdir %>
+
+    [ -x /sbin/sysctl ] || exit 6
+    <% if @config.ipv4_forward %>
+    /sbin/sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1
+    <% end %>
+    <% if @config.ipv6_forward %>
+    /sbin/sysctl -w net.ipv6.conf.all.forwarding=1 > /dev/null 2>&1
+    <% end %>
 }
 
 start() {
