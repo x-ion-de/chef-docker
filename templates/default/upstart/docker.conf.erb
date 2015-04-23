@@ -8,6 +8,14 @@ limit nproc 524288 1048576
 respawn
 
 pre-start script
+  [ -x /sbin/sysctl ] || exit 6
+  <% if @config.ipv4_forward %>
+  /sbin/sysctl -w net.ipv4.ip_forward=1 > /dev/null 2>&1
+  <% end %>
+  <% if @config.ipv6_forward %>
+  /sbin/sysctl -w net.ipv6.conf.all.forwarding=1 > /dev/null 2>&1
+  <% end %>
+
 	# see also https://github.com/tianon/cgroupfs-mount/blob/master/cgroupfs-mount
 	if grep -v '^#' /etc/fstab | grep -q cgroup \
 		|| [ ! -e /proc/cgroups ] \

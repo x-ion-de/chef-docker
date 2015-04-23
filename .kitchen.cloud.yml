@@ -87,20 +87,26 @@ suites:
 #
 - name: service-socket
   includes: [
+    'amazon-2014.09',
     'fedora-21',
     'centos-6.5',
     'centos-7.0',
-    'debian-7.0'
+    'debian-7.0',
+    'ubuntu-12.04',
+    'ubuntu-14.04'
   ]
   run_list:
   - recipe[docker_service_test::socket]
 
 - name: service-tcp-tls
   includes: [
+    'amazon-2014.09',
     'fedora-21',
     'centos-6.5',
     'centos-7.0',
-    'debian-7.0'
+    'debian-7.0',
+    'ubuntu-12.04',
+    'ubuntu-14.04'
   ]
   run_list:
   - recipe[docker_service_test::tcp-tls]

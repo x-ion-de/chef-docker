@@ -20,7 +20,12 @@ DOCKER_PIDFILE=@config.pidfile %>
 export HTTP_PROXY=<%= @config.http_proxy %>
 <% end %>
 
-<% if @config.no_proxy-%>
+# If you need Docker to use an HTTP proxy, it can also be specified here.
+<% if @config.https_proxy %>
+export HTTPS_PROXY=<%= @config.http_proxy %>
+<% end %>
+
+<% if @config.no_proxy %>
 export NO_PROXY=<%= @config.no_proxy %>
 <% end %>
 
