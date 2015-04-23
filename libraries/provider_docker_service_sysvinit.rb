@@ -16,7 +16,11 @@ class Chef
             group 'root'
             mode '0755'
             cookbook 'docker'
-            variables(config: new_resource, pidfile: parsed_pidfile)
+            variables(
+              config: new_resource,
+              docker_opts: docker_opts,
+              pidfile: parsed_pidfile
+              )
             action :create
           end
 
