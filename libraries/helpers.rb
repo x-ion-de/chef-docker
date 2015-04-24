@@ -1,12 +1,3 @@
-# Modules
-module DockerHelpers
-  # Path to docker executable
-  def docker_bin
-    return '/usr/bin/docker.io' if Docker::Helpers.using_docker_io_package?(node)
-    "#{node['docker']['install_dir']}/docker"
-  end
-end
-
 # Docker module
 module Docker
   # Docker::Helpers module
