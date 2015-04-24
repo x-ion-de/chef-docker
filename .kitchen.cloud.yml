@@ -70,7 +70,6 @@ platforms:
   - recipe[apt]
 
 - name: ubuntu-14.04
-  driver_plugin: vagrant
   driver_plugin: digital_ocean
   driver_config:
     size: 2gb
@@ -80,6 +79,18 @@ platforms:
     ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
   run_list:
   - recipe[apt]
+
+- name: ubuntu-15.04
+  driver_plugin: digital_ocean
+  driver_config:
+    size: 2gb
+    image: ubuntu-15-04-x64
+    region: <%= ENV['DIGITALOCEAN_REGION'] %>
+    ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+    ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+  run_list:
+  - recipe[apt]
+
 
 suites:
 #
@@ -93,7 +104,8 @@ suites:
     'centos-7.0',
     'debian-7.0',
     'ubuntu-12.04',
-    'ubuntu-14.04'
+    'ubuntu-14.04',
+    'ubuntu-15.04'
   ]
   run_list:
   - recipe[docker_service_test::socket]
@@ -106,7 +118,7 @@ suites:
     'centos-7.0',
     'debian-7.0',
     'ubuntu-12.04',
-    'ubuntu-14.04'
+    'ubuntu-15.04',
   ]
   run_list:
   - recipe[docker_service_test::tcp-tls]
