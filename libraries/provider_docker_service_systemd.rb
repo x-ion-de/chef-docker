@@ -33,13 +33,14 @@ class Chef
 
           # avoid 'Unit file changed on disk' warning
           execute 'systemctl daemon-reload' do
-            command '/usr/bin/systemctl daemon-reload'
+            command '/bin/systemctl daemon-reload' if node['platform'] == 'ubuntu'
+            command '/usr/bin/systemctl daemon-reload' unless node['platform'] == 'ubuntu'
             action :nothing
           end
 
           # tmpfiles.d config so the service survives reboot
-          template '/lib/tmpfiles.d/docker.conf' do
-            path '/lib/tmpfiles.d/docker.conf'
+          template '/usr//lib/tmpfiles.d/docker.conf' do
+            path '/usr/lib/tmpfiles.d/docker.conf'
             source 'systemd/tmpfiles.d.conf.erb'
             owner 'root'
             group 'root'

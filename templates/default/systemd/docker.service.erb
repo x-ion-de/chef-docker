@@ -18,10 +18,10 @@ Environment="NO_PROXY=<%= @config.no_proxy %>"
 Environment="TMPDIR=<%= @config.tmpdir %>"
 <% end %>
 <% if @config.ipv4_forward %>
-ExecStartPre=/usr/sbin/sysctl -w net.ipv4.ip_forward=1
+ExecStartPre=/sbin/sysctl -w net.ipv4.ip_forward=1
 <% end %>
 <% if @config.ipv6_forward %>
-ExecStartPre=/usr/sbin/sysctl -w net.ipv6.conf.all.forwarding=1
+ExecStartPre=/sbin/sysctl -w net.ipv6.conf.all.forwarding=1
 <% end %>
 ExecStart=<%= @docker_bin %> -d <% @docker_opts.each do |opt| %><%= opt %><% end %>
 ExecStop=/usr/bin/kill `/usr/sbin/pidof docker`

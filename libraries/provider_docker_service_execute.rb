@@ -12,9 +12,9 @@ class Chef
           bash 'start docker' do
             code "#{docker_daemon_cmd} &>> #{docker_log} &"
             environment 'HTTP_PROXY' => new_resource.http_proxy,
-            'HTTPS_PROXY' => new_resource.https_proxy,
-            'NO_PROXY' => new_resource.no_proxy,
-            'TMPDIR' => new_resource.tmpdir
+                        'HTTPS_PROXY' => new_resource.https_proxy,
+                        'NO_PROXY' => new_resource.no_proxy,
+                        'TMPDIR' => new_resource.tmpdir
             not_if "ps -ef | awk '{ print $8 }' | grep ^#{docker_bin}$"
             action :run
           end
