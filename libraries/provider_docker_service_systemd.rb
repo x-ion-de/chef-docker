@@ -2,15 +2,21 @@ class Chef
   class Provider
     class DockerService
       class Systemd < Chef::Provider::DockerService
+        # Set provider mappings for Chef 12
         provides :docker_service, platform: 'fedora'
+
         provides :docker_service, platform: %w(redhat centos scientific) do |node|
           node[:platform_version].to_f >= 7.0
         end
 
+        provides :docker_service, platform: 'ubuntu' do |node|
+          node[:platform_version].to_f >= 15.04
+        end
+
         action :start do
           # this is the main systemd unit file
-          template '/usr/lib/systemd/system/docker.service' do
-            path '/usr/lib/systemd/system/docker.service'
+          template '/lib/systemd/system/docker.service' do
+            path '/lib/systemd/system/docker.service'
             source 'systemd/docker.service.erb'
             owner 'root'
             group 'root'
@@ -32,8 +38,8 @@ class Chef
           end
 
           # tmpfiles.d config so the service survives reboot
-          template '/usr/lib/tmpfiles.d/docker.conf' do
-            path '/usr/lib/tmpfiles.d/docker.conf'
+          template '/lib/tmpfiles.d/docker.conf' do
+            path '/lib/tmpfiles.d/docker.conf'
             source 'systemd/tmpfiles.d.conf.erb'
             owner 'root'
             group 'root'
@@ -57,7 +63,7 @@ class Chef
             provider Chef::Provider::Service::Systemd
             supports status: true
             action [:disable, :stop]
-            only_if { ::File.exist?('/usr/lib/systemd/system/docker.service') }
+            only_if { ::File.exist?('/lib/systemd/system/docker.service') }
           end
         end
 
