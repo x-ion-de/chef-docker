@@ -64,7 +64,7 @@ class Chef
       attribute :no_proxy, kind_of: String, default: nil
       attribute :tmpdir, kind_of: String, default: nil
 
-      # misc
+      # logging
       attribute :logfile, kind_of: String, default: '/var/log/docker.log'
 
       include DockerHelpers

@@ -4,7 +4,7 @@
 DOCKER="<%= @docker_bin %>"
 
 <% if @config.docker_log %>
-DOCKER_LOGFILE=<%= @config.docker_log %>
+DOCKER_LOGFILE=<%= @config.logfile %>
 <% end %>
 
 # Use DOCKER_OPTS to modify the daemon startup options.
