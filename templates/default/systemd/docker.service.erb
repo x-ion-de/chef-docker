@@ -25,7 +25,7 @@ ExecStartPre=/sbin/sysctl -w net.ipv6.conf.all.forwarding=1
 <% end %>
 ExecStart=<%= @docker_bin %> -d <% @docker_opts.each do |opt| %><%= opt %><% end %>
 ExecStop=/usr/bin/kill `/usr/sbin/pidof docker`
-MountFlags=slave # FIXME: why not private?
+MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576
 LimitCORE=infinity
