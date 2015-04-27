@@ -6,11 +6,11 @@ class Chef
         provides :docker_service, platform: 'fedora'
 
         provides :docker_service, platform: %w(redhat centos scientific) do |node|
-          node[:platform_version].to_f >= 7.0
+          node['platform_version'].to_f >= 7.0
         end
 
         provides :docker_service, platform: 'ubuntu' do |node|
-          node[:platform_version].to_f >= 15.04
+          node['platform_version'].to_f >= 15.04
         end
 
         action :start do
