@@ -58,6 +58,17 @@ platforms:
   run_list:
   - recipe[apt]
 
+# - name: debian-8
+#   driver_plugin: digital_ocean
+#   driver_config:
+#     size: 2gb
+#     image: debian-8-x64
+#     region: <%= ENV['DIGITALOCEAN_REGION'] %>
+#     ssh_key_ids: <%= ENV['DIGITALOCEAN_SSH_KEYS'] %>
+#     ssh_key: <%= ENV['DIGITALOCEAN_SSH_KEY_PATH'] %>
+#   run_list:
+#   - recipe[apt]
+
 - name: ubuntu-12.04
   driver_plugin: digital_ocean
   driver_config:
@@ -103,6 +114,7 @@ suites:
     'centos-6.5',
     'centos-7.0',
     'debian-7.0',
+    'debian-8',
     'ubuntu-12.04',
     'ubuntu-14.04',
     'ubuntu-15.04'
@@ -117,6 +129,7 @@ suites:
     'centos-6.5',
     'centos-7.0',
     'debian-7.0',
+    'debian-8',
     'ubuntu-12.04',
     'ubuntu-15.04',
   ]
