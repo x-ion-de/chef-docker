@@ -1,5 +1,5 @@
 # Constants
-IPV6_ADDR = /(
+IPV6_ADDR ||= /(
 ([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
 ([0-9a-fA-F]{1,4}:){1,7}:|
 ([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|
@@ -18,7 +18,7 @@ fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|
 (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
 )/
 
-IPV4_ADDR = /((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/
+IPV4_ADDR ||= /((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])/
 
 module DockerHelpers
   # Path to docker executable
@@ -77,6 +77,21 @@ module DockerHelpers
     cmd
   end
 
+  # strip out invalid host arguments
+  def parsed_host
+    sockets = new_resource.host.split if new_resource.host.class == String
+    sockets = new_resource.host if new_resource.host.class == Array
+    r = []
+    sockets.each do |s|
+      if s.match(/^unix:/) || s.match(/^tcp:/)  || s.match(/^fd:/)
+        r << s
+      else
+        Chef::Log.info("WARNING: docker_service host property #{s} not valid")
+      end
+    end
+    r
+  end
+  
   def docker_opts
     opts = []
     opts << " --api-cors-header=#{new_resource.api_cors_header}" if new_resource.api_cors_header
@@ -91,7 +106,7 @@ module DockerHelpers
     opts << " --fixed-cidr-v6=#{new_resource.fixed_cidr_v6}" if new_resource.fixed_cidr_v6
     opts << " --group=#{new_resource.group}" if new_resource.group
     opts << " --graph=#{new_resource.graph}" if new_resource.graph
-    opts << " --host=#{new_resource.host}" if new_resource.host
+    parsed_host.each { || opts << "-H #{h}" } if new_resource.host
     opts << ' --icc=true' if new_resource.icc
     opts << " --insecure-registry=#{new_resource.insecure_registry}" if new_resource.insecure_registry
     opts << " --ip=#{new_resource.ip}" if new_resource.ip
