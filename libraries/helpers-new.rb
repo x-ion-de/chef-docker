@@ -83,7 +83,7 @@ module DockerHelpers
     sockets = new_resource.host if new_resource.host.class == Array
     r = []
     sockets.each do |s|
-      if s.match(/^unix:/) || s.match(/^tcp:/)  || s.match(/^fd:/)
+      if s.match(/^unix:/) || s.match(/^tcp:/) || s.match(/^fd:/)
         r << s
       else
         Chef::Log.info("WARNING: docker_service host property #{s} not valid")
@@ -91,7 +91,7 @@ module DockerHelpers
     end
     r
   end
-  
+
   def docker_opts
     opts = []
     opts << " --api-cors-header=#{new_resource.api_cors_header}" if new_resource.api_cors_header
