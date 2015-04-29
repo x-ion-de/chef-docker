@@ -2,71 +2,52 @@
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/bflad/chef-docker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Description
+Installs/Configures [Docker](http://docker.io). Please see
+[COMPATIBILITY.md](COMPATIBILITY.md) for more information about Docker
+versions that are tested and supported by cookbook versions along with
+LWRP features.
 
-Installs/Configures [Docker](http://docker.io). Please see [COMPATIBILITY.md](COMPATIBILITY.md) for more information about Docker versions that are tested and supported by cookbook versions along with LWRP features.
-
-This cookbook was inspired by @thoward's docker-cookbook: https://github.com/thoward/docker-cookbook
+This cookbook was inspired by @thoward's docker-cookbook:
+https://github.com/thoward/docker-cookbook
 
 ## Breaking Change Alert
+In version 1.0 of this cookbook, we have made a significant
+breaking changes including the way that we handle resources
+(`docker_image`, `docker_container` and `docker_registry`). It is
+highly recommended that you constrain the version of the cookbook you
+are using in the appropriate places.
 
-In version 1.0 of this cookbook, we will be making a significant breaking changes including the way that we handle the custom resources (`docker_image`, `docker_container` and `docker_registry`). It is highly recommended that you constrain the version of the cookbook you are using in the appropriate places.
-  - metadata.rb
-  - Chef Environments
-  - Berksfile
-  - Chef Policyfile
+- metadata.rb
+- Chef Environments
+- Berksfile
+- Chef Policyfile
 
-More details about specific changes will be documented in the [1.0_CHANGES.md](1.0_CHANGES.md) file.
+More details about specific changes will be documented in the
+[1.0_CHANGES.md](1.0_CHANGES.md) file.
 
 ## Requirements
+FIXME: blah blah
 
 ### Chef
-
 * Chef 11+
 
 ### Platforms
-
-* Amazon 2014.03.1 (experimental)
-* CentOS 6
+* Amazon 2014.09
+* CentOS 6, 7
+* Fedora 21
 * Debian 7
-* Fedora 19, 20
-* Mac OS X (only docker installation currently)
-* Oracle 6
-* RHEL 6
-* Ubuntu 12.04, 12.10, 13.04, 13.10, 14.04 (experimental)
-
-### Cookbooks
-
-[Opscode Cookbooks](https://github.com/opscode-cookbooks/)
-
-* [apt](https://github.com/opscode-cookbooks/apt)
-* [git](https://github.com/opscode-cookbooks/git)
-* [homebrew](https://github.com/opscode-cookbooks/homebrew)
-* [yum-epel](https://github.com/opscode-cookbooks/yum-epel)
-
-Third-Party Cookbooks
-
-* [aufs](https://github.com/bflad/chef-aufs)
-* [device-mapper](https://github.com/bflad/chef-device-mapper)
-* [golang](https://github.com/NOX73/chef-golang)
-* [lxc](https://github.com/hw-cookbooks/lxc)
-* [modules](https://github.com/Youscribe/modules-cookbook)
-* [sysctl](https://github.com/onehealth-cookbooks/sysctl)
+* Ubuntu 12.04, 14.04, and 15.04
 
 ## Usage
 
-### Default Installation
-
-* Add `recipe[docker]` to your node's run list
-
 ### Execution Drivers
 
-If your system is running a Docker version before 0.9, you'll need to explicitly set up LXC outside of this cookbook. This will likely be true for most distros after Docker 1.0 and chef-docker 1.0 is released.
-* [lxc on community site](http://community.opscode.com/cookbooks/lxc)
-* [lxc on Github](https://github.com/hw-cookbooks/lxc/)
+FIXME: blah blah
 
 ### Storage Drivers
-
-Beginning in chef-docker 1.0, storage driver installation and configuration is expected to be handled before this cookbook's execution, except where required by Docker.
+Beginning in chef-docker 1.0, storage driver installation and
+configuration is expected to be handled before this cookbook's
+execution, except where required by Docker.
 
 #### AUFS
 
@@ -84,149 +65,7 @@ If you need device-mapper support, consider adding the device-mapper cookbook to
 
 Then, set the `storage_driver` attribute of this cookbook to `devicemapper` (please note lack of dash).
 
-### Ubuntu 14.04 Package Installation via Docker PPA
 
-By default, this cookbook will use the docker.io package from Ubuntu 14.04's repository. To use the Docker PPA package, just set the repo_url attribute to the Docker PPA URL. e.g. `node.set['docker']['package']['repo_url'] = 'https://get.docker.io/ubuntu'`
-
-## Attributes
-
-### Installation/System Attributes
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-arch | Architecture for docker binary (note: Docker only currently supports x86_64) | String | auto-detected (see attributes/default.rb)
-group_members | Users to manage in `node['docker']['group']` | Array of Strings | []
-init_type | Init type for docker ("runit", "systemd", "sysv", or "upstart") | String | auto-detected (see attributes/default.rb)
-install_dir | Installation directory for docker binary (custom setting only valid for non-package installations) | String | auto-detected (see attributes/default.rb)
-install_type | Installation type for docker ("binary", "package" or "source") | String | package
-ipv4_forward | Sysctl set net.ipv4.ip_forward to 1 | TrueClass, FalseClass | true
-ipv6_forward | Sysctl set net.ipv6.conf.all.forwarding to 1 | TrueClass, FalseClass | true
-version | Version of docker | String | nil
-
-#### Binary Installation Attributes
-
-These attributes are under the `node['docker']['binary']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-checksum | Optional SHA256 checksum for docker binary | String | auto-detected (see attributes/default.rb)
-version | Version of docker binary | String | `node['docker']['version']` (if set) or `latest`
-url | URL for downloading docker binary | String | `http://get.docker.io/builds/#{node['kernel']['name']}/#{node['docker']['arch']}/docker-#{node['docker']['binary']['version']}`
-
-#### Package Installation Attributes
-
-These attributes are under the `node['docker']['package']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-action | Action for docker packages ("install", "update", etc.) | String | install
-distribution | Distribution for docker packages | String | auto-detected (see attributes/default.rb)
-name | Override Docker package name | String | auto-detected (see attributes/default.rb)
-repo_url | Repository URL for docker packages | String | auto-detected (see attributes/default.rb)
-repo_key | Repository GPG key URL for docker packages | String | https://get.docker.io/gpg
-
-#### Source Installation Attributes
-
-These attributes are under the `node['docker']['source']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-ref | Repository reference for docker source | String | master
-url | Repository URL for docker source | String | https://github.com/dotcloud/docker.git
-
-### Docker Daemon Attributes
-
-For more information: http://docs.docker.io/en/latest/reference/commandline/cli/#daemon
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-api_enable_cors | Enable CORS headers in API | TrueClass, FalseClass | nil
-bind_socket (*DEPRECATED*) | Socket path that docker should bind | String | unix:///var/run/docker.sock
-bind_uri (*DEPRECATED*) | TCP URI docker should bind | String | nil
-bip | Use this CIDR notation address for the network bridge's IP, not compatible with `bridge` | String | nil
-bridge | Attach containers to a pre-existing network bridge; use 'none' to disable container networking | String | nil
-debug | Enable debug mode | TrueClass, FalseClass | nil (implicitly false)
-dns | DNS server(s) for containers | String, Array | nil
-dns_search | DNS search domain(s) for containers | String, Array | nil
-exec_driver | Execution driver for docker | String | nil (implicitly native as of 0.9.0)
-graph | Path to use as the root of the docker runtime | String | nil (implicitly /var/lib/docker)
-group | Group for docker socket and group_members | String | nil (implicitly docker)
-host | Socket(s) that docker should bind | String, Array | unix:///var/run/docker.sock
-http_proxy | HTTP_PROXY environment variable | String | nil
-icc | Enable inter-container communication | TrueClass, FalseClass | nil (implicitly true)
-insecure-registry | List of well-known insecure registries | String, Array | nil
-ip | Default IP address to use when binding container ports | String | nil (implicitly 0.0.0.0)
-iptables | Enable Docker's addition of iptables rules | TrueClass, FalseClass | nil (implicitly true)
-logfile | Set custom DOCKER_LOGFILE | String | nil
-mtu | Set the containers network MTU | Fixnum | nil (implicitly default route MTU or 1500 if no default route is available)
-no_proxy | NO_PROXY environment variable | String | nil
-options | Additional options to pass to docker. These could be flags like "-api-enable-cors". | String | nil
-pidfile | Path to use for daemon PID file | String | nil (implicitly /var/run/docker.pid)
-ramdisk | Set DOCKER_RAMDISK when using RAM disk | TrueClass or FalseClass | false
-registry-mirror | List of docker registry mirrors | String, Array | nil
-restart (*DEPRECATED*) | Restart containers on boot | TrueClass or FalseClass | nil
-selinux_enabled | Enable SELinux | TrueClass or FalseClass | nil
-storage_driver | Storage driver for docker | String | nil
-storage_opt | Storage driver options | String, Array | nil
-tls | Use TLS | TrueClass, FalseClass | nil (implicitly false)
-tlscacert | Trust only remotes providing a certificate signed by the CA given here | String | nil (implicitly ~/.docker/ca.pem)
-tlscert | Path to TLS certificate file | String | nil (implicitly ~/.docker/cert.pem)
-tlskey | Path to TLS key file | String | nil (implicitly ~/.docker/key.pem)
-tlsverify | Use TLS and verify the remote (daemon: verify client, client: verify daemon) | TrueClass, FalseClass | nil (implicitly false)
-tmpdir | TMPDIR environment variable | String | nil
-
-### LWRP Attributes
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-docker_daemon_timeout | Timeout to wait for the docker daemon to start in seconds for LWRP commands | Fixnum | 10
-
-#### docker_container Attributes
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-container_cmd_timeout | container LWRP default cmd_timeout seconds | Fixnum | 60
-container_init_type | Init type for docker containers (nil, "runit", "systemd", "sysv", or "upstart") | String | `node['docker']['init_type']`
-
-#### docker_image Attributes
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-image_cmd_timeout | image LWRP default cmd_timeout seconds | Fixnum | 300
-
-#### docker_registry Attributes
-
-These attributes are under the `node['docker']` namespace.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-registry_cmd_timeout | registry LWRP default cmd_timeout seconds | Fixnum | 60
-
-## Recipes
-
-* `recipe[docker]` Installs/Configures Docker
-* `recipe[docker::aufs]` Installs/Loads AUFS Linux module
-* `recipe[docker::binary]` Installs Docker binary
-* `recipe[docker::cgroups]` Installs/configures default platform Control Groups support
-* `recipe[docker::devicemapper]` Installs/Configures Device Mapper
-* `recipe[docker::group]` Installs/Configures docker group
-* `recipe[docker::lxc]` Installs/configures default platform LXC support
-* `recipe[docker::package]` Installs Docker via package
-* `recipe[docker::runit]` Installs/Starts Docker via runit
-* `recipe[docker::source]` Installs Docker via source
-* `recipe[docker::systemd]` Installs/Starts Docker via systemd
-* `recipe[docker::sysv]` Installs/Starts Docker via SysV
-* `recipe[docker::upstart]` Installs/Starts Docker via Upstart
 
 ## LWRPs
 
@@ -273,9 +112,9 @@ timestamp = Time.new.strftime('%Y%m%d%H%M')
 
 # Commit container changes
 docker_container 'crowsnest' do
-  repository 'apps'
-  tag timestamp
-  action :commit
+   repository 'apps'
+   tag timestamp
+   action :commit
 end
 
 # Push image
@@ -316,10 +155,10 @@ Commit a container with optional repository, run specification, and tag:
 
 ```ruby
 docker_container 'myApp' do
-  repository 'myRepo'
-  tag Time.new.strftime("%Y%m%d%H%M")
-  run '{"Cmd": ["cat", "/world"], "PortSpecs": ["22"]}'
-  action :commit
+repository 'myRepo'
+tag Time.new.strftime("%Y%m%d%H%M")
+run '{"Cmd": ["cat", "/world"], "PortSpecs": ["22"]}'
+action :commit
 end
 ```
 
@@ -336,9 +175,9 @@ Copying a file from container to host:
 
 ```ruby
 docker_container 'myApp' do
-  source '/path/to/container/file'
-  destination '/path/to/save/on/host'
-  action :cp
+source '/path/to/container/file'
+destination '/path/to/save/on/host'
+action :cp
 end
 ```
 
@@ -360,8 +199,8 @@ Exporting container to host:
 
 ```ruby
 docker_container 'myApp' do
-  destination '/path/to/save/on/host.tgz'
-  action :export
+destination '/path/to/save/on/host.tgz'
+action :export
 end
 ```
 
@@ -381,7 +220,7 @@ Kill a running container:
 
 ```ruby
 docker_container 'shipyard' do
-  action :kill
+action :kill
 end
 ```
 
@@ -389,8 +228,8 @@ Send SIGQUIT to a running container:
 
 ```ruby
 docker_container 'shipyard' do
-  signal 'QUIT'
-  action :kill
+signal 'QUIT'
+action :kill
 end
 ```
 
@@ -404,13 +243,13 @@ Redeploy container when new image is pulled:
 
 ```ruby
 docker_image 'shipyard/shipyard' do
-  action :pull
-  notifies :redeploy, 'docker_container[shipyard]', :immediately
+action :pull
+notifies :redeploy, 'docker_container[shipyard]', :immediately
 end
 
 docker_container 'shipyard' do
-  # Other attributes
-  action :run
+# Other attributes
+action :run
 end
 ```
 
@@ -430,7 +269,7 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-  action :remove
+action :remove
 end
 ```
 
@@ -446,8 +285,8 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-  link 'foo'
-  action :remove_link
+link 'foo'
+action :remove_link
 end
 ```
 
@@ -463,8 +302,8 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-  volume %w(/extravol1 /extravol2)
-  action :remove_volume
+volume %w(/extravol1 /extravol2)
+action :remove_volume
 end
 ```
 
@@ -483,7 +322,7 @@ Restart a container:
 
 ```ruby
 docker_container 'shipyard' do
-  action :restart
+action :restart
 end
 ```
 
@@ -539,7 +378,7 @@ Run a container:
 
 ```ruby
 docker_container 'myImage' do
-  detach true
+detach true
 end
 ```
 
@@ -547,8 +386,8 @@ Run a container via command:
 
 ```ruby
 docker_container 'busybox' do
-  command 'sleep 9999'
-  detach true
+command 'sleep 9999'
+detach true
 end
 ```
 
@@ -556,12 +395,12 @@ Run a container from image (docker-registry for example):
 
 ```ruby
 docker_container 'docker-registry' do
-  image 'samalba/docker-registry'
-  detach true
-  hostname 'docker-registry.example.com'
-  port '5000:5000'
-  env 'SETTINGS_FLAVOR=local'
-  volume '/mnt/docker:/docker-storage'
+image 'samalba/docker-registry'
+detach true
+hostname 'docker-registry.example.com'
+port '5000:5000'
+env 'SETTINGS_FLAVOR=local'
+volume '/mnt/docker:/docker-storage'
 end
 ```
 
@@ -581,7 +420,7 @@ Start a stopped container:
 
 ```ruby
 docker_container 'shipyard' do
-  action :start
+action :start
 end
 ```
 
@@ -600,7 +439,7 @@ Stop a running container:
 
 ```ruby
 docker_container 'shipyard' do
-  action :stop
+action :stop
 end
 ```
 
@@ -610,8 +449,8 @@ Wait for a container to finish:
 
 ```ruby
 docker_container 'busybox' do
-  command 'sleep 9999'
-  action :wait
+command 'sleep 9999'
+action :wait
 end
 ```
 
@@ -643,9 +482,9 @@ Build image from Dockerfile:
 
 ```ruby
 docker_image 'myImage' do
-  tag 'myTag'
-  source 'myImageDockerfile'
-  action :build_if_missing
+tag 'myTag'
+source 'myImageDockerfile'
+action :build_if_missing
 end
 ```
 
@@ -653,9 +492,9 @@ Build image from remote repository:
 
 ```ruby
 docker_image 'myImage' do
-  source 'example.com/foo/myImage'
-  tag 'myTag'
-  action :build_if_missing
+source 'example.com/foo/myImage'
+tag 'myTag'
+action :build_if_missing
 end
 ```
 
@@ -663,12 +502,12 @@ Conditionally rebuild image if changes upstream:
 
 ```ruby
 git "#{Chef::Config[:file_cache_path]}/docker-testcontainerd" do
-  repository 'git@github.com:bflad/docker-testcontainerd.git'
-  notifies :build, 'docker_image[tduffield/testcontainerd]', :immediately
+repository 'git@github.com:bflad/docker-testcontainerd.git'
+notifies :build, 'docker_image[tduffield/testcontainerd]', :immediately
 end
 
 docker_image 'tduffield/testcontainerd' do
-  action :pull_if_missing
+action :pull_if_missing
 end
 ```
 
@@ -687,8 +526,8 @@ Import image from local directory:
 
 ```ruby
 docker_image 'test' do
-  source '/path/to/test'
-  action :import
+source '/path/to/test'
+action :import
 end
 ```
 
@@ -696,8 +535,8 @@ Import image from local file:
 
 ```ruby
 docker_image 'test' do
-  source '/path/to/test.tgz'
-  action :import
+source '/path/to/test.tgz'
+action :import
 end
 ```
 
@@ -705,8 +544,8 @@ Import image from remote URL:
 
 ```ruby
 docker_image 'test' do
-  source 'https://example.com/testimage.tgz'
-  action :import
+source 'https://example.com/testimage.tgz'
+action :import
 end
 ```
 
@@ -725,9 +564,9 @@ Insert file from remote URL:
 
 ```ruby
 docker_image 'test' do
-  source 'http://example.com/some/file.txt'
-  destination '/container/path/for/some/file.txt'
-  action :insert
+source 'http://example.com/some/file.txt'
+destination '/container/path/for/some/file.txt'
+action :insert
 end
 ```
 
@@ -744,8 +583,8 @@ Load repository via input:
 
 ```ruby
 docker_image 'test' do
-  input '/path/to/test.tar'
-  action :load
+input '/path/to/test.tar'
+action :load
 end
 ```
 
@@ -753,8 +592,8 @@ Load repository via stdin:
 
 ```ruby
 docker_image 'test' do
-  source '/path/to/test.tgz'
-  action :load
+source '/path/to/test.tgz'
+action :load
 end
 ```
 
@@ -777,7 +616,7 @@ Pull latest image only if missing:
 
 ```ruby
 docker_image 'busybox' do
-  action :pull_if_missing
+action :pull_if_missing
 end
 ```
 
@@ -785,7 +624,7 @@ Pull tagged image:
 
 ```ruby
 docker_image 'bflad/test' do
-  tag 'not-latest'
+tag 'not-latest'
 end
 ```
 
@@ -795,7 +634,7 @@ Push image (after logging in with `docker_registry`):
 
 ```ruby
 docker_image 'bflad/test' do
-  action :push
+action :push
 end
 ```
 
@@ -812,7 +651,7 @@ Remove image:
 
 ```ruby
 docker_image 'busybox' do
-  action :remove
+action :remove
 end
 ```
 
@@ -830,8 +669,8 @@ Save repository via file to path:
 
 ```ruby
 docker_image 'test' do
-  destination '/path/to/test.tar'
-  action :save
+destination '/path/to/test.tar'
+action :save
 end
 ```
 
@@ -839,8 +678,8 @@ Save repository via stdout to path:
 
 ```ruby
 docker_image 'test' do
-  destination '/path/to/test.tgz'
-  action :save
+destination '/path/to/test.tgz'
+action :save
 end
 ```
 
@@ -858,44 +697,35 @@ Tag image:
 
 ```ruby
 docker_image 'test' do
-  repository 'bflad'
-  tag '1.0.0'
-  action :tag
+repository 'bflad'
+tag '1.0.0'
+action :tag
 end
 ```
 
 ### docker_registry
-
-These attributes are associated with all LWRP actions.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-cmd_timeout | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Registry::CommandTimeout`) | Integer | `node['docker']['registry_cmd_timeout']`
+FIXME: blah blah blah
 
 #### docker_registry action :login
 
-These attributes are associated with this LWRP action.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-email | Registry email | String | nil
-password | Registry password | String | nil
-username | Registry username | String | nil
-
 Log into or register with public registry:
 
-    docker_registry 'https://index.docker.io/v1/' do
-      email 'publicme@example.com'
-      username 'publicme'
-      password 'hope_this_is_in_encrypted_databag'
-    end
+```ruby
+docker_registry 'https://index.docker.io/v1/' do
+  email 'publicme@example.com'
+  username 'publicme'
+  password 'hope_this_is_in_encrypted_databag'
+end
+```
 
 Log into private registry with optional port:
 
-    docker_registry 'https://docker-registry.example.com:8443/' do
-      username 'privateme'
-      password 'still_hope_this_is_in_encrypted_databag'
-    end
+```ruby
+docker_registry 'https://docker-registry.example.com:8443/' do
+   username 'privateme'
+   password 'still_hope_this_is_in_encrypted_databag'
+end
+```
 
 ## Testing and Development
 
@@ -911,6 +741,7 @@ Please see contributing information in: [CONTRIBUTING.md](CONTRIBUTING.md)
 * Tom Duffield (http://tomduffield.com)
 * Brian Flad (<bflad417@gmail.com>)
 * Fletcher Nichol (<fnichol@nichol.ca>)
+* Sean OMeara (sean@chef.io)
 
 ## License
 
