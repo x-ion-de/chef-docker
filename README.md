@@ -1,16 +1,13 @@
-# chef-docker [![Build Status](https://secure.travis-ci.org/bflad/chef-docker.png?branch=master)](http://travis-ci.org/bflad/chef-docker)
+Docker Cookbook
+===============
+[![Build Status](https://secure.travis-ci.org/bflad/chef-docker.png?branch=master)](http://travis-ci.org/bflad/chef-docker)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/bflad/chef-docker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-## Description
-Installs/Configures [Docker](http://docker.io). Please see
-[COMPATIBILITY.md](COMPATIBILITY.md) for more information about Docker
-versions that are tested and supported by cookbook versions along with
-LWRP features.
+The Docker Cookbook is a library cookbook that provides resources
+(LWRPs) for use in recipes.
 
-This cookbook was inspired by @thoward's docker-cookbook:
-https://github.com/thoward/docker-cookbook
-
-## Breaking Change Alert
+Breaking Changes Alert
+----------------------
 In version 1.0 of this cookbook, we have made a significant
 breaking changes including the way that we handle resources
 (`docker_image`, `docker_container` and `docker_registry`). It is
@@ -25,32 +22,89 @@ are using in the appropriate places.
 More details about specific changes will be documented in the
 [1.0_CHANGES.md](1.0_CHANGES.md) file.
 
-## Requirements
-FIXME: blah blah
+Scope
+-----
+This cookbook is concerned with the [Docker](http://docker.io)
+container engine as distributed by Docker, Inc. It does not address
+with docker ecosystem tooling or prerequisite technology such as
+cgroups or aufs.
 
-### Chef
-* Chef 11+
+Requirements
+------------
+- Chef 11 or higher
+- Ruby 1.9 or higher (preferably from the Chef full-stack installer)
+- Network accessible web server hosting the docker binary.
 
-### Platforms
-* Amazon 2014.09
-* CentOS 6, 7
-* Fedora 21
-* Debian 7
-* Ubuntu 12.04, 14.04, and 15.04
+Platform Support
+----------------
+The following platforms have been tested with Test Kitchen:
 
-## Usage
+```
+|--------------+-------|
+|              | 1.6.0 |
+|--------------+-------|
+| amazon       | X     |
+|--------------+-------|
+| centos-6     | X     |
+|--------------+-------|
+| centos-7     | X     |
+|--------------+-------|
+| fedora-21    | X     |
+|--------------+-------|
+| debian-7     | X     |
+|--------------+-------|
+| ubuntu-12.04 | X     |
+|--------------+-------|
+| ubuntu-14.04 | X     |
+|--------------+-------|
+| ubuntu-15.04 | X     |
+|--------------+-------|
+```
 
-### Execution Drivers
+Cookbook Dependencies
+---------------------
+- none!
 
-FIXME: blah blah
+Usage
+-----
+- Add ```depends 'docker', '~> 1.0'``` to your cookbook's metadata.rb
+- Place resources shipped in this cookbook in a recipe, the same way
+  you'd use core Chef resources (file, template, directory, package, etc).
 
-### Storage Drivers
+```ruby
+docker_service 'default' do
+  action [:create, :start]
+end
+
+docker_image 'busybox' do
+  action :pull
+end
+
+docker_container 'an echo server' do
+  image 'busybox'
+  command "nc -ll -p 1234 -e /bin/cat"
+  detach true
+  init_type false
+end
+```
+
+Test Cookbooks as Examples
+--------------------------
+The cookbooks ran under test-kitchen make excellent usage examples.
+Explore test/fixtures/cookbooks in this repository.
+
+# SAVEGAME: YOU ARE HERE
+
+Execution Drivers
+-----------------
+
+Storage Drivers
+---------------
 Beginning in chef-docker 1.0, storage driver installation and
 configuration is expected to be handled before this cookbook's
 execution, except where required by Docker.
 
-#### AUFS
-
+### AUFS
 If you need AUFS support, consider adding the aufs cookbook to your node/recipe before docker.
 * [aufs on community site](http://community.opscode.com/cookbooks/aufs)
 * [chef-aufs on Github](https://github.com/bflad/chef-aufs)
