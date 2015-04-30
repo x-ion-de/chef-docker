@@ -224,25 +224,21 @@ Property | Description | Type | Default
 `source` | URL to the pre-compiled Docker binary used for installation. Defaults to a calculated URL based on kernel version, Docker version, and platform arch. By default, this will try to get to "http://get.docker.io/builds/". | String | nil
 `version` | Docker version to install | String | nil
 `checksum` | sha256 checksum of Docker binary | String | nil
-`instance` | Identity for ```docker_service``` resource. Defaults to
-name. Mostly unimportant for the 1.0 version because of its singleton
-status. | String | nil
+`instance` | Identity for ```docker_service``` resource. Defaults to name. Mostly unimportant for the 1.0 version because of its singleton status. | String | nil
 `api_cors_header` | Set CORS headers in the remote API | String | nil
 `bridge` | Attach containers to a network bridge | String | nil
 `bip` |Specify network bridge IP | String | nil
 `debug` | Enable debug mode | String | nil
 `daemon` | Enable daemon mode | String | nil
 `dns` | DNS server to use | String | nil
-`dns_search` |DNS search domains to use | String | nil
+`dns_search` | DNS search domains to use | String | nil
 `exec_driver` | Exec driver to use | String | nil
 `fixed_cidr` | IPv4 subnet for fixed IPs | String | nil
 `fixed_cidr_v6` | IPv6 subnet for fixed IPs | String | nil
 `group` | Posix group for the unix socket | String | nil
-`graph` | Root of the Docker runtime - Effectively, the "data directory" |String | nil
-`host` | Daemon socket(s) to connect to - `tcp://host:port`,
-`unix:///path/to/socket`, `fd://*` or `fd://socketfd` | String | nil
-`icc` | Enable inter-container communication | String | nil
-`insecure_registry` | Enable inter-container communication | String | nil
+`graph` | Root of the Docker runtime - Effectively, the "data directory" | String | nil
+`host` | Daemon socket(s) to connect to - `tcp://host:port`, `unix:///path/to/socket`, `fd://*` or `fd://socketfd` | String | nil
+`icc` | Enable inter-container communication | String | nil `insecure_registry` | Enable inter-container communication | String | nil
 `ip` | Enable inter-container communication | String | nil
 `ip_forward` | Enable ip forwarding | String | nil
 `ipv4_forward` | Enable net.ipv4.ip_forward | String | nil
