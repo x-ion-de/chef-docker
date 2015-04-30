@@ -222,12 +222,12 @@ the options found in the [Docker Command Line Reference](https://docs.docker.com
 - `source` - URL to the pre-compiled Docker binary used for
   installation. Defaults to a calculated URL based on kernel version,
   Docker version, and platform arch. By default, this will try to get
-  to "http://get.docker.io/builds/". 
+  to "http://get.docker.io/builds/".
 - `version` - Docker version to install
 - `checksum` - sha256 checksum of Docker binary
 - `instance` - Identity for ```docker_service``` resource. Defaults to
   name. Mostly unimportant for the 1.0 version because of its
-  singleton status. 
+  singleton status.
 - `api_cors_header` - Set CORS headers in the remote API
 - `bridge` - Attach containers to a network bridge
 - `bip` - Specify network bridge IP
@@ -277,13 +277,12 @@ Below are the available actions for the LWRP, default being `run`.
 
 These attributes are associated with all LWRP actions.
 
-|----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
+
 | Attribute      | Description                                                                                            | Type    | Default                                   |
 |----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
 | cmd_timeout    | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Container::CommandTimeout`) | Integer | `node['docker']['container_cmd_timeout']` |
 | command        | Command to run in or identify container                                                                | String  | nil                                       |
 | container_name | Name for container/service                                                                             | String  | nil                                       |
-|----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
 
 #### docker_container action :commit
 
