@@ -280,7 +280,7 @@ These attributes are associated with all LWRP actions.
 
 Property | Description | Type | Default                                   
 ---------|-------------|------|---------
-cmd_timeout | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Container::CommandTimeout`) | Integer | `node['docker']['container_cmd_timeout']` 
+cmd_timeout | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Container::CommandTimeout`) | Integer | 60
 command | Command to run in or identify container | String  | nil
 container_name | Name for container/service | String | nil
 
