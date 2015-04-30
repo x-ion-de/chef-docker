@@ -225,55 +225,54 @@ Property | Description | Type | Default
   installation. Defaults to a calculated URL based on kernel version,
   Docker version, and platform arch. By default, this will try to get
   to "http://get.docker.io/builds/". | String | nil
-`version` | Docker version to install ||
-`checksum` | sha256 checksum of Docker binary ||
+`version` | Docker version to install | String | nil
+`checksum` | sha256 checksum of Docker binary | String | nil
 `instance` | Identity for ```docker_service``` resource. Defaults to
 name. Mostly unimportant for the 1.0 version because of its singleton
-status. ||
-
+status. | String | nil
 `api_cors_header` | Set CORS headers in the remote API | String | nil
-`bridge` | Attach containers to a network bridge |
-`bip` |Specify network bridge IP |
-`debug` | Enable debug mode |
-`daemon` | Enable daemon mode |
-`dns` | DNS server to use |
-`dns_search` |DNS search domains to use |
-`exec_driver` | Exec driver to use |
-`fixed_cidr` | IPv4 subnet for fixed IPs |
-`fixed_cidr_v6` | IPv6 subnet for fixed IPs |
-`group` | Posix group for the unix socket |
-`graph` | Root of the Docker runtime - Effectively, the "data directory".
+`bridge` | Attach containers to a network bridge | String | nil
+`bip` |Specify network bridge IP | String | nil
+`debug` | Enable debug mode | String | nil
+`daemon` | Enable daemon mode | String | nil
+`dns` | DNS server to use | String | nil
+`dns_search` |DNS search domains to use | String | nil
+`exec_driver` | Exec driver to use | String | nil
+`fixed_cidr` | IPv4 subnet for fixed IPs | String | nil
+`fixed_cidr_v6` | IPv6 subnet for fixed IPs | String | nil
+`group` | Posix group for the unix socket | String | nil
+`graph` | Root of the Docker runtime - Effectively, the "data directory" |String | nil
 `host` | Daemon socket(s) to connect to - `tcp://host:port`,
-`unix:///path/to/socket`, `fd://*` or `fd://socketfd` |
-`icc` | Enable inter-container communication |
-`insecure_registry` | Enable inter-container communication |
-`ip` | Enable inter-container communication |
-`ip_forward` | Enable ip forwarding |
-`ipv4_forward` | Enable net.ipv4.ip_forward |
-`ipv6_forward` | Enable net.ipv6.ip_forward |
-`ip_masq` | Enable IP masquerading |
-`iptables` | Enable addition of iptables rules |
-`ipv6` | Enable IPv6 networking |
-`log_level` | Set the logging level |
-`label` | Set key=value labels to the daemon |
-`log_driver` | Container's logging driver (json-file/none) |
-`mtu` | Container's logging driver (json-file/none) |
-`pidfile` | Path to use for daemon PID file |
-`registry_mirror` | Preferred Docker registry mirror |
-`storage_driver` | Storage driver to use |
-`selinux_enabled` | Enable selinux support |
-`storage_opt` | Set storage driver options |
-`tls` | Use TLS; implied by --tlsverify |
-`tlscacert` | Trust certs signed only by this CA |
-`tlscert` | Path to TLS certificate file |
-`tlskey` | Path to TLS key file |
-`tlsverify` | Use TLS and verify the remote |
-`default_ulimit` | Set default ulimit settings for containers |
-http_proxy | ENV variable set before for Docker daemon starts |
-https_proxy | ENV variable set before for Docker daemon starts |
-no_proxy | ENV variable set before for Docker daemon starts |
-tmpdir | ENV variable set before for Docker daemon starts |
-logfile | Location of Docker daemon log file |
+`unix:///path/to/socket`, `fd://*` or `fd://socketfd` | String | nil
+`icc` | Enable inter-container communication | String | nil
+`insecure_registry` | Enable inter-container communication | String | nil
+`ip` | Enable inter-container communication | String | nil
+`ip_forward` | Enable ip forwarding | String | nil
+`ipv4_forward` | Enable net.ipv4.ip_forward | String | nil
+`ipv6_forward` | Enable net.ipv6.ip_forward | String | nil
+`ip_masq` | Enable IP masquerading | String | nil
+`iptables` | Enable addition of iptables rules | String | nil
+`ipv6` | Enable IPv6 networking | String | nil
+`log_level` | Set the logging level | String | nil
+`label` | Set key=value labels to the daemon | String | nil
+`log_driver` | Container's logging driver (json-file/none) | String | nil
+`mtu` | Container's logging driver (json-file/none) | String | nil
+`pidfile` | Path to use for daemon PID file | String | nil
+`registry_mirror` | Preferred Docker registry mirror | String | nil
+`storage_driver` | Storage driver to use | String | nil
+`selinux_enabled` | Enable selinux support | String | nil
+`storage_opt` | Set storage driver options | String | nil
+`tls` | Use TLS; implied by --tlsverify | String | nil
+`tlscacert` | Trust certs signed only by this CA | String | nil
+`tlscert` | Path to TLS certificate file | String | nil
+`tlskey` | Path to TLS key file | String | nil
+`tlsverify` | Use TLS and verify the remote | String | nil
+`default_ulimit` | Set default ulimit settings for containers | String | nil
+http_proxy | ENV variable set before for Docker daemon starts | String | nil
+https_proxy | ENV variable set before for Docker daemon starts | String | nil
+no_proxy | ENV variable set before for Docker daemon starts | String | nil
+tmpdir | ENV variable set before for Docker daemon starts | String | nil
+logfile | Location of Docker daemon log file | String | nil
 
 ### docker_container
 
