@@ -225,21 +225,22 @@ the options found in the [Docker Command Line Reference](https://docs.docker.com
   to "http://get.docker.io/builds/". 
 - version - Docker version to install
 - checksum - sha256 checksum of Docker binary
-
-- instance - 
-- api_cors_header -
-- bridge -
-- bip -
-- debug -
-- daemon -
-- dns -
-- dns_search -
-- exec_driver -
-- fixed_cidr -
-- fixed_cidr_v6 -
-- group -
-- graph -
-- host -
+- instance - Identity for ```docker_service``` resource. Defaults to
+  name. Mostly unimportant for the 1.0 version because of its
+  singleton status. 
+- api_cors_header - Set CORS headers in the remote API
+- bridge - Attach containers to a network bridge
+- bip - Specify network bridge IP
+- debug - Enable debug mode
+- daemon - Enable daemon mode
+- dns - DNS server to use
+- dns_search - DNS search domains to use
+- exec_driver - Exec driver to use
+- fixed_cidr - IPv4 subnet for fixed IPs
+- fixed_cidr_v6 - IPv6 subnet for fixed IPs
+- group - Posix group for the unix socket
+- graph - Root of the Docker runtime - Effectively, the "data directory".
+- host - 
 - icc -
 - insecure_registry -
 - ip -
