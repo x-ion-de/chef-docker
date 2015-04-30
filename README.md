@@ -225,11 +225,11 @@ Property | Description | Type | Default
   installation. Defaults to a calculated URL based on kernel version,
   Docker version, and platform arch. By default, this will try to get
   to "http://get.docker.io/builds/". | String | nil
-`version` | Docker version to install
-`checksum` | sha256 checksum of Docker binary
+`version` | Docker version to install ||
+`checksum` | sha256 checksum of Docker binary ||
 `instance` | Identity for ```docker_service``` resource. Defaults to
 name. Mostly unimportant for the 1.0 version because of its singleton
-status.
+status. ||
 
 `api_cors_header` | Set CORS headers in the remote API | String | nil
 `bridge` | Attach containers to a network bridge |
