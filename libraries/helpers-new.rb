@@ -106,7 +106,7 @@ module DockerHelpers
     opts << " --fixed-cidr-v6=#{new_resource.fixed_cidr_v6}" if new_resource.fixed_cidr_v6
     opts << " --group=#{new_resource.group}" if new_resource.group
     opts << " --graph=#{new_resource.graph}" if new_resource.graph
-    parsed_host.each { |h| opts << "-H #{h}" } if new_resource.host
+    parsed_host.each { |h| opts << " -H #{h}" } if new_resource.host
     opts << ' --icc=true' if new_resource.icc
     opts << " --insecure-registry=#{new_resource.insecure_registry}" if new_resource.insecure_registry
     opts << " --ip=#{new_resource.ip}" if new_resource.ip
