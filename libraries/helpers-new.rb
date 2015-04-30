@@ -120,7 +120,7 @@ module DockerHelpers
     opts << " --mtu=#{new_resource.mtu}" if new_resource.mtu
     opts << " --pidfile=#{new_resource.pidfile}" if new_resource.pidfile
     opts << " --registry-mirror=#{new_resource.registry_mirror}" if new_resource.registry_mirror
-    opts << " --storage_driver=#{new_resource.storage_driver}" if new_resource.storage_driver
+    opts << " --storage-driver=#{new_resource.storage_driver}" if new_resource.storage_driver
     opts << ' --selinux-enabled=true' if new_resource.selinux_enabled
     opts << " --storage-opt=#{new_resource.storage_opt}" if new_resource.storage_opt
     opts << ' --tls=true' if new_resource.tls
