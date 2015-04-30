@@ -120,17 +120,14 @@ end
 Configuration of the backing storage driver, including kernel module
 loading, is out of scope for this cookbook.
 
-# SAVEGAME: YOU ARE HERE
-
-Resources
----------
+Resources Overview
+------------------
 * docker_service: docker daemon installation and configuration
 * docker_container: container operations
 * docker_image: image/repository operations
 * docker_registry: registry operations
 
 ### Getting Started
-
 Here's a quick example of pulling the latest image and running a
 container with exposed ports (creates service automatically):
 
@@ -183,8 +180,90 @@ docker_image 'crowsnest' do
 end
 ```
 
-See full documentation for each LWRP and action below for more
+See full documentation for each resource and action below for more
 information.
+
+Resources Details
+------------------
+The ```docker_service```, ```docker_image```, ```docker_container```,
+and ```docker_registry``` resources are documented in full below.
+
+### docker_service
+The `docker_service` manages a Docker daemon.
+
+The `:create` action manages software installation.
+The `:start` action manages the running docker service on the machine.
+
+The service management strategy for the host platform is dynamically
+chosen based on platform, but can be overridden. See the "providers"
+section below for more information.
+
+#### Example
+```ruby
+docker_service 'tls_test:2376' do
+  host ["tcp://#{node['ipaddress']}:2376", 'unix:///var/run/docker.sock']
+  tlscacert '/path/to/ca.pem'
+  tlscert '/path/to/server.pem'
+  tlskey '/path/to/serverkey.pem'
+  tlsverify true
+  provider Chef::Provider::DockerService::Systemd
+  action [:create, :start]
+end
+```
+WARNING - As of the 1.0 version of this cookbook, ```docker_service```
+is a singleton resource. This means that if you create multiple
+```docker_service``` resources on the same machine, you will only
+create one actual service and things may not work as expected.
+
+#### Properties
+The ```docker_service``` resource property list mostly corresponds to
+the options found in the [Docker Command Line Reference](https://docs.docker.com/reference/commandline/cli/)
+
+- source - URL to the pre-compiled Docker binary used for
+  installation. Defaults to a calculated URL based on kernel version,
+  Docker version, and platform arch. By default, this will try to get
+  to "http://get.docker.io/builds/". 
+- version - Docker version to install
+- checksum - sha256 checksum of Docker binary
+
+- instance - 
+- api_cors_header -
+- bridge -
+- bip -
+- debug -
+- daemon -
+- dns -
+- dns_search -
+- exec_driver -
+- fixed_cidr -
+- fixed_cidr_v6 -
+- group -
+- graph -
+- host -
+- icc -
+- insecure_registry -
+- ip -
+- ip_forward -
+- ipv4_forward -
+- ipv6_forward -
+- ip_masq -
+- iptables -
+- ipv6 -
+- log_level -
+- label -
+- log_driver -
+- mtu -
+- pidfile -
+- registry_mirror -
+- storage_driver -
+- selinux_enabled -
+- storage_opt -
+- tls -
+- tlscacert -
+- tlscert -
+- tlskey -
+- tlsverify -
+- default_ulimit -
 
 ### docker_container
 
@@ -192,11 +271,13 @@ Below are the available actions for the LWRP, default being `run`.
 
 These attributes are associated with all LWRP actions.
 
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-cmd_timeout | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Container::CommandTimeout`)| Integer | `node['docker']['container_cmd_timeout']`
-command | Command to run in or identify container | String | nil
-container_name | Name for container/service | String | nil
+|----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
+| Attribute      | Description                                                                                            | Type    | Default                                   |
+|----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
+| cmd_timeout    | Timeout for docker commands (catchable exception: `Chef::Provider::Docker::Container::CommandTimeout`) | Integer | `node['docker']['container_cmd_timeout']` |
+| command        | Command to run in or identify container                                                                | String  | nil                                       |
+| container_name | Name for container/service                                                                             | String  | nil                                       |
+|----------------+--------------------------------------------------------------------------------------------------------+---------+-------------------------------------------|
 
 #### docker_container action :commit
 
@@ -234,9 +315,9 @@ Copying a file from container to host:
 
 ```ruby
 docker_container 'myApp' do
-source '/path/to/container/file'
-destination '/path/to/save/on/host'
-action :cp
+  source '/path/to/container/file'
+  destination '/path/to/save/on/host'
+  action :cp
 end
 ```
 
@@ -258,8 +339,8 @@ Exporting container to host:
 
 ```ruby
 docker_container 'myApp' do
-destination '/path/to/save/on/host.tgz'
-action :export
+  destination '/path/to/save/on/host.tgz'
+  action :export
 end
 ```
 
@@ -279,7 +360,7 @@ Kill a running container:
 
 ```ruby
 docker_container 'shipyard' do
-action :kill
+  action :kill
 end
 ```
 
@@ -287,8 +368,8 @@ Send SIGQUIT to a running container:
 
 ```ruby
 docker_container 'shipyard' do
-signal 'QUIT'
-action :kill
+  signal 'QUIT'
+  action :kill
 end
 ```
 
@@ -302,13 +383,13 @@ Redeploy container when new image is pulled:
 
 ```ruby
 docker_image 'shipyard/shipyard' do
-action :pull
-notifies :redeploy, 'docker_container[shipyard]', :immediately
+  action :pull
+  notifies :redeploy, 'docker_container[shipyard]', :immediately
 end
 
 docker_container 'shipyard' do
-# Other attributes
-action :run
+  # Other attributes
+  action :run
 end
 ```
 
@@ -328,7 +409,7 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-action :remove
+  action :remove
 end
 ```
 
@@ -344,8 +425,8 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-link 'foo'
-action :remove_link
+  link 'foo'
+  action :remove_link
 end
 ```
 
@@ -361,8 +442,8 @@ Remove a container:
 
 ```ruby
 docker_container 'shipyard' do
-volume %w(/extravol1 /extravol2)
-action :remove_volume
+  volume %w(/extravol1 /extravol2)
+  action :remove_volume
 end
 ```
 
@@ -381,7 +462,7 @@ Restart a container:
 
 ```ruby
 docker_container 'shipyard' do
-action :restart
+  action :restart
 end
 ```
 
@@ -437,7 +518,7 @@ Run a container:
 
 ```ruby
 docker_container 'myImage' do
-detach true
+  detach true
 end
 ```
 
@@ -445,8 +526,8 @@ Run a container via command:
 
 ```ruby
 docker_container 'busybox' do
-command 'sleep 9999'
-detach true
+  command 'sleep 9999'
+  detach true
 end
 ```
 
@@ -454,12 +535,12 @@ Run a container from image (docker-registry for example):
 
 ```ruby
 docker_container 'docker-registry' do
-image 'samalba/docker-registry'
-detach true
-hostname 'docker-registry.example.com'
-port '5000:5000'
-env 'SETTINGS_FLAVOR=local'
-volume '/mnt/docker:/docker-storage'
+  image 'samalba/docker-registry'
+  detach true
+  hostname 'docker-registry.example.com'
+  port '5000:5000'
+  env 'SETTINGS_FLAVOR=local'
+  volume '/mnt/docker:/docker-storage'
 end
 ```
 
@@ -479,7 +560,7 @@ Start a stopped container:
 
 ```ruby
 docker_container 'shipyard' do
-action :start
+  action :start
 end
 ```
 
@@ -498,7 +579,7 @@ Stop a running container:
 
 ```ruby
 docker_container 'shipyard' do
-action :stop
+  action :stop
 end
 ```
 
@@ -508,8 +589,8 @@ Wait for a container to finish:
 
 ```ruby
 docker_container 'busybox' do
-command 'sleep 9999'
-action :wait
+  command 'sleep 9999'
+  action :wait
 end
 ```
 
@@ -541,9 +622,9 @@ Build image from Dockerfile:
 
 ```ruby
 docker_image 'myImage' do
-tag 'myTag'
-source 'myImageDockerfile'
-action :build_if_missing
+  tag 'myTag'
+  source 'myImageDockerfile'
+  action :build_if_missing
 end
 ```
 
@@ -551,9 +632,9 @@ Build image from remote repository:
 
 ```ruby
 docker_image 'myImage' do
-source 'example.com/foo/myImage'
-tag 'myTag'
-action :build_if_missing
+  source 'example.com/foo/myImage'
+  tag 'myTag'
+  action :build_if_missing
 end
 ```
 
@@ -561,12 +642,12 @@ Conditionally rebuild image if changes upstream:
 
 ```ruby
 git "#{Chef::Config[:file_cache_path]}/docker-testcontainerd" do
-repository 'git@github.com:bflad/docker-testcontainerd.git'
-notifies :build, 'docker_image[tduffield/testcontainerd]', :immediately
+  repository 'git@github.com:bflad/docker-testcontainerd.git'
+  notifies :build, 'docker_image[tduffield/testcontainerd]', :immediately
 end
 
 docker_image 'tduffield/testcontainerd' do
-action :pull_if_missing
+  action :pull_if_missing
 end
 ```
 
@@ -585,8 +666,8 @@ Import image from local directory:
 
 ```ruby
 docker_image 'test' do
-source '/path/to/test'
-action :import
+  source '/path/to/test'
+  action :import
 end
 ```
 
@@ -594,8 +675,8 @@ Import image from local file:
 
 ```ruby
 docker_image 'test' do
-source '/path/to/test.tgz'
-action :import
+  source '/path/to/test.tgz'
+  action :import
 end
 ```
 
@@ -603,29 +684,8 @@ Import image from remote URL:
 
 ```ruby
 docker_image 'test' do
-source 'https://example.com/testimage.tgz'
-action :import
-end
-```
-
-#### docker_image action :insert
-
-*ACTION DEPRECATED AS OF DOCKER 0.10.0*
-
-These attributes are associated with this LWRP action.
-
-Attribute | Description | Type | Default
-----------|-------------|------|--------
-destination | Destination path/URL | String | nil
-source | Source path/URL | String | nil
-
-Insert file from remote URL:
-
-```ruby
-docker_image 'test' do
-source 'http://example.com/some/file.txt'
-destination '/container/path/for/some/file.txt'
-action :insert
+  source 'https://example.com/testimage.tgz'
+  action :import
 end
 ```
 
@@ -642,8 +702,8 @@ Load repository via input:
 
 ```ruby
 docker_image 'test' do
-input '/path/to/test.tar'
-action :load
+  input '/path/to/test.tar'
+  action :load
 end
 ```
 
@@ -651,8 +711,8 @@ Load repository via stdin:
 
 ```ruby
 docker_image 'test' do
-source '/path/to/test.tgz'
-action :load
+  source '/path/to/test.tgz'
+  action :load
 end
 ```
 
@@ -675,7 +735,7 @@ Pull latest image only if missing:
 
 ```ruby
 docker_image 'busybox' do
-action :pull_if_missing
+  action :pull_if_missing
 end
 ```
 
@@ -683,7 +743,7 @@ Pull tagged image:
 
 ```ruby
 docker_image 'bflad/test' do
-tag 'not-latest'
+  tag 'not-latest'
 end
 ```
 
@@ -693,7 +753,7 @@ Push image (after logging in with `docker_registry`):
 
 ```ruby
 docker_image 'bflad/test' do
-action :push
+  action :push
 end
 ```
 
@@ -710,7 +770,7 @@ Remove image:
 
 ```ruby
 docker_image 'busybox' do
-action :remove
+  action :remove
 end
 ```
 
@@ -728,8 +788,8 @@ Save repository via file to path:
 
 ```ruby
 docker_image 'test' do
-destination '/path/to/test.tar'
-action :save
+  destination '/path/to/test.tar'
+  action :save
 end
 ```
 
@@ -737,8 +797,8 @@ Save repository via stdout to path:
 
 ```ruby
 docker_image 'test' do
-destination '/path/to/test.tgz'
-action :save
+  destination '/path/to/test.tgz'
+  action :save
 end
 ```
 
@@ -756,9 +816,9 @@ Tag image:
 
 ```ruby
 docker_image 'test' do
-repository 'bflad'
-tag '1.0.0'
-action :tag
+  repository 'bflad'
+  tag '1.0.0'
+  action :tag
 end
 ```
 
