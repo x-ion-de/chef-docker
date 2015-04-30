@@ -222,9 +222,10 @@ the options found in the [Docker Command Line Reference](https://docs.docker.com
 Property | Description | Type | Default
 ---------|-------------|------|---------
 `source` | URL to the pre-compiled Docker binary used for
-  installation. Defaults to a calculated URL based on kernel version,
-  Docker version, and platform arch. By default, this will try to get
-  to "http://get.docker.io/builds/". | String | nil
+installation. Defaults to a calculated URL based on kernel version,
+Docker version, and platform arch. By default, this will try to get
+to "http://get.docker.io/builds/". | String | nil
+
 `version` | Docker version to install | String | nil
 `checksum` | sha256 checksum of Docker binary | String | nil
 `instance` | Identity for ```docker_service``` resource. Defaults to
