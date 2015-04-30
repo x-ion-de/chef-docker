@@ -88,49 +88,51 @@ docker_container 'an echo server' do
   init_type false
 end
 ```
-
 Test Cookbooks as Examples
 --------------------------
 The cookbooks ran under test-kitchen make excellent usage examples.
-Explore test/fixtures/cookbooks in this repository.
+The above recipe is actually used as a smoke test, and is converged by
+test-kitchen during development. It is located in this repo at
+test/cookbooks/docker_test/recipes/hello_world.rb
+
+More example recipes can be found at:
+```ruby
+test/cookbooks/docker_test/
+test/cookbooks/docker_service_test/
+```
+
+Cgroups, Execution and Storage drivers
+--------------------------------------
+Beginning in chef-docker 1.0, support for LXC execution driver has
+been removed in favor of native. Cgroups and storage drivers are now
+loosely coupled dependencies and should be configured using other
+cookbooks.
+
+Storage drivers can be selected with the `storage_driver` property on
+the `docker_service` resource like this:
+
+```ruby
+docker_service 'default' do
+   storage_driver 'overlay'
+end
+```
+
+Configuration of the backing storage driver, including kernel module
+loading, is out of scope for this cookbook.
 
 # SAVEGAME: YOU ARE HERE
 
-Execution Drivers
------------------
-
-Storage Drivers
----------------
-Beginning in chef-docker 1.0, storage driver installation and
-configuration is expected to be handled before this cookbook's
-execution, except where required by Docker.
-
-### AUFS
-If you need AUFS support, consider adding the aufs cookbook to your node/recipe before docker.
-* [aufs on community site](http://community.opscode.com/cookbooks/aufs)
-* [chef-aufs on Github](https://github.com/bflad/chef-aufs)
-
-Then, set the `storage_driver` attribute of this cookbook to `aufs`.
-
-#### device-mapper
-
-If you need device-mapper support, consider adding the device-mapper cookbook to your node/recipe before docker.
-* [device-mapper on community site](http://community.opscode.com/cookbooks/device-mapper)
-* [chef-device-mapper on Github](https://github.com/bflad/chef-device-mapper)
-
-Then, set the `storage_driver` attribute of this cookbook to `devicemapper` (please note lack of dash).
-
-
-
-## LWRPs
-
+Resources
+---------
+* docker_service: docker daemon installation and configuration
 * docker_container: container operations
 * docker_image: image/repository operations
 * docker_registry: registry operations
 
 ### Getting Started
 
-Here's a quick example of pulling the latest image and running a container with exposed ports (creates service automatically):
+Here's a quick example of pulling the latest image and running a
+container with exposed ports (creates service automatically):
 
 ```ruby
 # Pull latest image
@@ -145,7 +147,8 @@ docker_container 'samalba/docker-registry' do
 end
 ```
 
-Maybe you want to automatically update your private registry with changes from your container?
+Maybe you want to automatically update your private registry with
+changes from your container?
 
 ```ruby
 # Login to private registry
@@ -180,7 +183,8 @@ docker_image 'crowsnest' do
 end
 ```
 
-See full documentation for each LWRP and action below for more information.
+See full documentation for each LWRP and action below for more
+information.
 
 ### docker_container
 
