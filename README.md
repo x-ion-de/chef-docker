@@ -122,10 +122,10 @@ loading, is out of scope for this cookbook.
 
 Resources Overview
 ------------------
-* docker_service: docker daemon installation and configuration
-* docker_container: container operations
-* docker_image: image/repository operations
-* docker_registry: registry operations
+* `docker_service`: docker daemon installation and configuration
+* `docker_container`: container operations
+* `docker_image`: image/repository operations
+* `docker_registry`: registry operations
 
 ### Getting Started
 Here's a quick example of pulling the latest image and running a
