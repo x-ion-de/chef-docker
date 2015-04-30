@@ -228,38 +228,39 @@ Property | Description | Type | Default
 `api_cors_header` | Set CORS headers in the remote API | String | nil
 `bridge` | Attach containers to a network bridge | String | nil
 `bip` |Specify network bridge IP | String | nil
-`debug` | Enable debug mode | String | nil
-`daemon` | Enable daemon mode | String | nil
+`debug` | Enable debug mode | [TrueClass, FalseClass] | true
+`daemon` | Enable daemon mode | [TrueClass, FalseClass] | true
 `dns` | DNS server to use | String | nil
-`dns_search` | DNS search domains to use | String | nil
-`exec_driver` | Exec driver to use | String | nil
+`dns_search` | DNS search domains to use | Array | nil
+`exec_driver` | Exec driver to use | equal_to: %w(native lxc) | nil
 `fixed_cidr` | IPv4 subnet for fixed IPs | String | nil
 `fixed_cidr_v6` | IPv6 subnet for fixed IPs | String | nil
 `group` | Posix group for the unix socket | String | nil
 `graph` | Root of the Docker runtime - Effectively, the "data directory" | String | nil
 `host` | Daemon socket(s) to connect to - `tcp://host:port`, `unix:///path/to/socket`, `fd://*` or `fd://socketfd` | String | nil
-`icc` | Enable inter-container communication | String | nil `insecure_registry` | Enable inter-container communication | String | nil
+`icc` | Enable inter-container communication | String | nil `insecure_registry` | Enable inter-container communication | [TrueClass, FalseClass] | nil
 `ip` | Enable inter-container communication | String | nil
-`ip_forward` | Enable ip forwarding | String | nil
-`ipv4_forward` | Enable net.ipv4.ip_forward | String | nil
-`ipv6_forward` | Enable net.ipv6.ip_forward | String | nil
-`ip_masq` | Enable IP masquerading | String | nil
-`iptables` | Enable addition of iptables rules | String | nil
-`ipv6` | Enable IPv6 networking | String | nil
-`log_level` | Set the logging level | String | nil
+`ip_forward` | Enable ip forwarding | [TrueClass, FalseClass] | true
+`ipv4_forward` | Enable net.ipv4.ip_forward | [TrueClass, FalseClass] | true
+`ipv6_forward` | Enable net.ipv6.ip_forward | [TrueClass, FalseClass] | true
+`ip_masq` | Enable IP masquerading | [TrueClass, FalseClass] | true
+`iptables` | Enable addition of iptables rules | [TrueClass, FalseClass] | true
+`ipv6` | Enable IPv6 networking | [TrueClass, FalseClass] | true
+`log_level` | Set the logging level | equal_to: [:debug, :info, :warn, :error, :fatal] | :info
 `label` | Set key=value labels to the daemon | String | nil
-`log_driver` | Container's logging driver (json-file/none) | String | nil
+`log_driver` | Container's logging driver (json-file/none) | equal_to:
+%w( json-file syslog none ) | nil
 `mtu` | Container's logging driver (json-file/none) | String | nil
 `pidfile` | Path to use for daemon PID file | String | nil
 `registry_mirror` | Preferred Docker registry mirror | String | nil
 `storage_driver` | Storage driver to use | String | nil
-`selinux_enabled` | Enable selinux support | String | nil
+`selinux_enabled` | Enable selinux support | [TrueClass, FalseClass] | nil
 `storage_opt` | Set storage driver options | String | nil
-`tls` | Use TLS; implied by --tlsverify | String | nil
+`tls` | Use TLS; implied by --tlsverify | [TrueClass, FalseClass] | true
 `tlscacert` | Trust certs signed only by this CA | String | nil
 `tlscert` | Path to TLS certificate file | String | nil
 `tlskey` | Path to TLS key file | String | nil
-`tlsverify` | Use TLS and verify the remote | String | nil
+`tlsverify` | Use TLS and verify the remote | [TrueClass, FalseClass] | nil
 `default_ulimit` | Set default ulimit settings for containers | String | nil
 http_proxy | ENV variable set before for Docker daemon starts | String | nil
 https_proxy | ENV variable set before for Docker daemon starts | String | nil
