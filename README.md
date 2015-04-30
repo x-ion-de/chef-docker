@@ -268,12 +268,13 @@ no_proxy | ENV variable set before for Docker daemon starts | String | nil
 tmpdir | ENV variable set before for Docker daemon starts | String | nil
 logfile | Location of Docker daemon log file | String | nil
 
+# SAVEGAME: YOU ARE HERE
+
 ### docker_container
 
 Below are the available actions for the LWRP, default being `run`.
 
 These attributes are associated with all LWRP actions.
-
 
 Property | Description | Type | Default
 ---------|-------------|------|---------
