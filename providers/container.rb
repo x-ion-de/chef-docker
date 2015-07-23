@@ -465,7 +465,7 @@ def service_create_runit
 end
 
 def service_create_systemd
-  template "/usr/lib/systemd/system/#{service_name}.socket" do
+  template ::File.join(node['docker']['systemd_system_dir'], "#{service_name}.socket") do
     if new_resource.socket_template.nil?
       source 'docker-container.socket.erb'
     else
@@ -483,7 +483,7 @@ def service_create_systemd
     action :nothing
   end.run_action(:create)
 
-  template "/usr/lib/systemd/system/#{service_name}.service" do
+  template ::File.join(node['docker']['systemd_system_dir'], "#{service_name}.service") do
     source service_template
     cookbook new_resource.cookbook
     mode '0644'
@@ -571,7 +571,7 @@ def service_remove_systemd
   service_stop_and_disable
 
   %w(service socket).each do |f|
-    file "/usr/lib/systemd/system/#{service_name}.#{f}" do
+    file ::File.join(node['docker']['systemd_system_dir'], "#{service_name}.#{f}") do
       action :delete
     end
   end

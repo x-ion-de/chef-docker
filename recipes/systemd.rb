@@ -1,3 +1,11 @@
+# Note(JR): Unmask docker.service for Ubuntu Vivid
+# Need to check where this comes from initially.
+file '/etc/systemd/system/docker.service' do
+  action :delete
+  force_unlink true
+  notifies :run, 'execute[systemctl-daemon-reload]', :immediately
+end
+
 execute 'systemctl-daemon-reload' do
   command '/bin/systemctl --system daemon-reload'
   action :nothing
